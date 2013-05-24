@@ -1,0 +1,7 @@
+%h1 Sauces
+%table
+  %tbody
+    - @sauces.each do |sauce|
+      %tr
+        %td=sauce.name
+        %td=sauce.manufacturer
