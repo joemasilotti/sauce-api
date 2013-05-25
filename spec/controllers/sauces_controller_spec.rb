@@ -17,29 +17,50 @@ describe SaucesController do
   end
 
   describe "#index" do
-    it "displays a list of sauces" do
-      sauce1 = FactoryGirl.create(:sauce)
-      sauce2 = FactoryGirl.create(:sauce)
-      get :index
-      assigns(:sauces).should eq([sauce1, sauce2])
+    let!(:sauces) { [ FactoryGirl.create(:sauce), FactoryGirl.create(:sauce) ] }
+
+    context "when requesting HTML" do
+      it "displays a list of sauces" do
+        get :index
+        assigns(:sauces).should eq(sauces)
+      end
+
+      it "renders the :index view" do
+        get :index
+        response.should render_template :index
+      end
     end
 
-    it "renders the :index view" do
-      get :index
-      response.should render_template :index
+    context "when requesting JSON" do
+      it "renders the sauces in JSON" do
+        expected = sauces.to_json
+        get :index, :format => :json
+        response.body.should == expected
+      end
     end
   end
 
   describe "#show" do
-    it "display the sauce" do
-      sauce = FactoryGirl.create(:sauce)
-      get :show, id: sauce
-      assigns(:sauce).should eq(sauce)
+    let!(:sauce) { FactoryGirl.create(:sauce) }
+
+    context "when requesting HTML" do
+      it "display the sauce" do
+        get :show, id: sauce
+        assigns(:sauce).should eq(sauce)
+      end
+
+      it "renders the :show view" do
+        get :show, id: sauce
+        response.should render_template :show
+      end
     end
 
-    it "renders the :show view" do
-      get :show, id: FactoryGirl.create(:sauce)
-      response.should render_template :show
+    context "when requesting JSON" do
+      it "renders the sauce in JSON" do
+        expected = sauce.to_json
+        get :show, id: sauce, :format => :json
+        response.body.should == expected
+      end
     end
   end
 end
