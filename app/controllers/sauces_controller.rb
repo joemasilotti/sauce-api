@@ -5,4 +5,8 @@ class SaucesController < ApplicationController
       format.html
     end
   end
+
+  def show
+    @sauce = Sauce.find(params[:id])
+  end
 end

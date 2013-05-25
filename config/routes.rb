@@ -1,3 +1,4 @@
 SauceApi::Application.routes.draw do
-  resources :sauces, :only => [:index], :path => ''
+  resources :sauces, :only => [:index, :show]
+  root :to => "sauces#index"
 end
