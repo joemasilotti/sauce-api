@@ -11,11 +11,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130524033936) do
+ActiveRecord::Schema.define(:version => 20130524035738) do
 
   create_table "sauces", :force => true do |t|
-    t.string   "name"
-    t.string   "manufacturer"
+    t.text     "name"
+    t.text     "manufacturer"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
   end
