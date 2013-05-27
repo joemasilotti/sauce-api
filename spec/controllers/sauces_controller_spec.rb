@@ -97,4 +97,38 @@ describe SaucesController do
       end
     end
   end
+
+  describe "#new" do
+    def do_post
+      post :create, :sauce => {
+        :name => 'name',
+        :manufacturer => 'manufacturer'
+      }
+    end
+
+    context "when requesting HTML" do
+      it "renders the :new view" do
+        get :new
+        response.should render_template :new
+      end
+    end
+
+    context "when the sauce was successfully added" do
+      it "should increase the sauce count by one" do
+        lambda { do_post }.should change(Sauce, :count).by(1)
+      end
+      
+      it "should redirect to the show page" do
+        do_post.should redirect_to sauce_path(assigns(:sauce))
+      end
+    end
+
+    context "when the sauce creation has errors" do
+      before { post :create, :sauce => { :name => nil, :manufacturer => 'manufacturer' } }
+
+      it "show the new page again" do
+        response.should render_template :new
+      end
+    end
+  end
 end

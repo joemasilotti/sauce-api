@@ -25,4 +25,18 @@ class SaucesController < ApplicationController
       render :edit
     end
   end
+
+  def new
+    @sauce = Sauce.new
+  end
+
+  def create
+    @sauce = Sauce.new(params[:sauce])
+
+    if @sauce.save
+      redirect_to @sauce
+    else
+      render :new
+    end
+  end
 end

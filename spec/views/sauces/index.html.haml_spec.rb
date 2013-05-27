@@ -7,5 +7,6 @@ describe "sauces/index" do
     render
     rendered.should have_link('Show', href: sauce_url(sauce))
     rendered.should have_link('Edit', href: edit_sauce_url(sauce))
+    rendered.should have_link('Add', href: new_sauce_url)
   end
 end
