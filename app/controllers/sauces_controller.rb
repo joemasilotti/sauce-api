@@ -10,4 +10,19 @@ class SaucesController < ApplicationController
     @sauce = Sauce.find(params[:id])
     respond_with @sauce
   end
+
+  def edit
+    @sauce = Sauce.find(params[:id])
+    #respond_with @sauce
+  end
+
+  def update
+    @sauce = Sauce.find(params[:id])
+
+    if @sauce.update_attributes(params[:sauce])
+      redirect_to @sauce
+    else
+      render :edit
+    end
+  end
 end

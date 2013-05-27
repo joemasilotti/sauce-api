@@ -14,6 +14,10 @@ describe SaucesController do
     it "routes /sauces/1 to sauces#show" do
       { :get => "/sauces/1" }.should route_to(:controller => "sauces", :action =>"show", :id => "1")
     end
+
+    it "routes /sauces/1/edit to sauces#edit" do
+      { :get => "sauces/1/edit" }.should route_to(:controller => "sauces", :action => "edit", :id => "1")
+    end
   end
 
   describe "#index" do
@@ -60,6 +64,36 @@ describe SaucesController do
         expected = sauce.to_json
         get :show, id: sauce, :format => :json
         response.body.should == expected
+      end
+    end
+  end
+
+  describe "#edit" do
+    let!(:sauce) { FactoryGirl.create(:sauce) }
+
+    context "when requesting HTML" do
+      it "display the sauce" do
+        get :edit, id: sauce
+        assigns(:sauce).should eq(sauce)
+      end
+
+      it "renders the :edit view" do
+        get :edit, id: sauce
+        response.should render_template :edit
+      end
+    end
+
+    context "when the sauce was successfully updated" do
+      it "should redirect to the show page" do
+        put :update, :id => sauce, :sauce => { :name => "New Name" }
+        response.should redirect_to sauce_path(assigns(:sauce))
+      end
+    end
+
+    context "when the sauce update has errors" do
+      it "show the edit page again" do
+        put :update, :id => sauce, :sauce => { :name => nil }
+        response.should render_template :edit
       end
     end
   end

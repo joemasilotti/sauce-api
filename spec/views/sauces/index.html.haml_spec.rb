@@ -6,5 +6,6 @@ describe "sauces/index" do
     assign(:sauces, [sauce])
     render
     rendered.should have_link('Show', href: sauce_url(sauce))
+    rendered.should have_link('Edit', href: edit_sauce_url(sauce))
   end
 end
