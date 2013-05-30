@@ -39,4 +39,11 @@ class SaucesController < ApplicationController
       render :new
     end
   end
+
+  def destroy
+    @sauce = Sauce.find(params[:id])
+    @sauce.destroy
+
+    redirect_to sauces_path
+  end
 end

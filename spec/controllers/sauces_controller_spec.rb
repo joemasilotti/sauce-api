@@ -18,6 +18,14 @@ describe SaucesController do
     it "routes /sauces/1/edit to sauces#edit" do
       { :get => "sauces/1/edit" }.should route_to(:controller => "sauces", :action => "edit", :id => "1")
     end
+
+    it "routes /sauces/new to sauces#add" do
+      { :get => "sauces/new" }.should route_to(:controller => "sauces", :action => "new")
+    end
+
+    it "routes /sauces/1/delete to sauces#destroy" do
+      { :delete => "sauces/1" }.should route_to(:controller => "sauces", :action => "destroy", :id => "1")
+    end
   end
 
   describe "#index" do
@@ -129,6 +137,19 @@ describe SaucesController do
       it "show the new page again" do
         response.should render_template :new
       end
+    end
+  end
+
+  describe "#destroy" do
+    let!(:sauce) { FactoryGirl.create(:sauce) }
+
+    it "should destroy the sauce" do
+      lambda { delete :destroy, :id => sauce }.should change(Sauce, :count).by(-1)
+    end
+
+    it "should redirect to the index page" do
+      delete :destroy, :id => sauce
+      expect(response).to redirect_to sauces_path
     end
   end
 end

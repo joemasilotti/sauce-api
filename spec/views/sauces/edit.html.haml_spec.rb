@@ -15,4 +15,8 @@ describe "sauces/edit" do
   it "shows an editable field for sauce manufacturer" do
     rendered.should have_selector("input[name='sauce[manufacturer]']")
   end
+
+  it "shows a delete button" do
+    rendered.should have_selector("input[type='submit'][value='Delete']")
+  end
 end

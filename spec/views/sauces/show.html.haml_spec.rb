@@ -19,4 +19,8 @@ describe "sauces/show" do
   it "should show a link to edit the sauce" do
     rendered.should have_link('Edit', href: edit_sauce_url(sauce))
   end
+
+  it "shows a delete button" do
+    rendered.should have_selector("input[type='submit'][value='Delete']")
+  end
 end
