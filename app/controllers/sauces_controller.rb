@@ -13,7 +13,6 @@ class SaucesController < ApplicationController
 
   def edit
     @sauce = Sauce.find(params[:id])
-    #respond_with @sauce
   end
 
   def update

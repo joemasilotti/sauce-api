@@ -1,0 +1,3 @@
+%h1= @flavor.name
+= link_to "Edit", edit_flavor_url(@flavor)
+= button_to "Delete", @flavor, :method => :delete

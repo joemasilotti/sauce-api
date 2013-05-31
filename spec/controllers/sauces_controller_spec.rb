@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe SaucesController do
   context "routing" do
-
     it "routes root to sauces#index" do
       { :get => "/" }.should route_to("sauces#index")
     end
