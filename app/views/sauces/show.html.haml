@@ -1,4 +1,6 @@
 %h1= @sauce.name
 %h2= @sauce.manufacturer
-= link_to "Edit", edit_sauce_url(@sauce)
-= button_to "Delete", @sauce, :method => :delete
+Flavors
+%ul
+- @sauce.flavors.each do |flavor|
+  %li= flavor.name

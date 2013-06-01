@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :flavor do |flavor|
-    flavor.name "Flavor Name"
+  factory :flavor do
+    name "Flavor Name"
   end
 end

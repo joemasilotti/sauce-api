@@ -77,6 +77,7 @@ describe SaucesController do
 
   describe "#edit" do
     let!(:sauce) { FactoryGirl.create(:sauce) }
+    let!(:flavor) { FactoryGirl.create(:flavor) }
 
     context "when requesting HTML" do
       it "display the sauce" do
@@ -93,6 +94,13 @@ describe SaucesController do
     context "when the sauce was successfully updated" do
       it "should redirect to the show page" do
         put :update, :id => sauce, :sauce => { :name => "New Name" }
+        response.should redirect_to sauce_path(assigns(:sauce))
+      end
+    end
+
+    context "when the sauce's flavors were successfully updated" do
+      it "should redirect to the show page" do
+        put :update, :id => sauce, :sauce => { :name => "New Name", :flavor_ids => [ flavor ] }
         response.should redirect_to sauce_path(assigns(:sauce))
       end
     end

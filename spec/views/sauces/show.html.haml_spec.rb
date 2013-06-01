@@ -2,8 +2,12 @@ require 'spec_helper'
 
 describe "sauces/show" do
   let!(:sauce) { FactoryGirl.create(:sauce) }
+  let!(:associated_flavors) { [ FactoryGirl.create(:flavor, :name => "Sauce 1"), FactoryGirl.create(:flavor, :name => "Sauce 2") ] }
+  let!(:not_associated_flavor) { FactoryGirl.create(:flavor, :name => "Sauce 3") }
 
   before(:each) do
+    sauce.flavors = associated_flavors
+    sauce.save
     assign(:sauce, sauce)
     render
   end
@@ -16,11 +20,12 @@ describe "sauces/show" do
     rendered.should have_content(sauce.manufacturer)
   end
 
-  it "should show a link to edit the sauce" do
-    rendered.should have_link('Edit', href: edit_sauce_url(sauce))
+  it "should show each associated flavor" do
+    rendered.should have_content(associated_flavors[0].name)
+    rendered.should have_content(associated_flavors[1].name)
   end
 
-  it "shows a delete button" do
-    rendered.should have_selector("input[type='submit'][value='Delete']")
+  it "should not show the non associated flavors" do
+    rendered.should_not have_content(not_associated_flavor.name)
   end
 end

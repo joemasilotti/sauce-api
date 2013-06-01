@@ -16,8 +16,8 @@ describe "flavors/index" do
 
   it "should show a link to display, update, and delete each flavor" do
     @flavors.each do |flavor|
-      rendered.should have_link('Show', href: flavor_url(flavor))
-      rendered.should have_link('Edit', href: edit_flavor_url(flavor))
+      rendered.should have_link('Show', href: flavor_path(flavor))
+      rendered.should have_link('Edit', href: edit_flavor_path(flavor))
       rendered.should have_selector("input[type='submit'][value='Delete']")
     end
   end

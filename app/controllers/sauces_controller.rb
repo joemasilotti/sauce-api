@@ -13,6 +13,7 @@ class SaucesController < ApplicationController
 
   def edit
     @sauce = Sauce.find(params[:id])
+    @flavors = Flavor.all
   end
 
   def update

@@ -3,9 +3,12 @@
   %tbody
     - @flavors.each do |flavor|
       %tr
-        %td=flavor.name
         %td
-          %a{href: flavor_url(flavor)} Show
-          %a{href: edit_flavor_url(flavor)} Edit
-          = button_to "Delete", flavor, :method => :delete
-%a{href: new_flavor_url} Add
+          =flavor.name
+        %td
+          %a{href: flavor_path(flavor)} Show
+        %td
+          %a{href: edit_flavor_path(flavor)} Edit
+        %td
+          =button_to "Delete", flavor, :method => :delete
+%a{href: new_flavor_url} Add New Flavor

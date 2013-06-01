@@ -11,8 +11,4 @@ describe "flavors/edit" do
   it "shows an editable field for flavor name" do
     rendered.should have_selector("input[name='flavor[name]']")
   end
-
-  it "shows a delete button" do
-    rendered.should have_selector("input[type='submit'][value='Delete']")
-  end
 end
