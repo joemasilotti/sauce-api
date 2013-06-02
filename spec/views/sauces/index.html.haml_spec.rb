@@ -17,13 +17,13 @@ describe "sauces/index" do
 
   it "should show a link to display, update, and delete each sauce" do
     @sauces.each do |sauce|
-      rendered.should have_link('Show', href: sauce_url(sauce))
-      rendered.should have_link('Edit', href: edit_sauce_url(sauce))
+      rendered.should have_link('Show', href: sauce_path(sauce))
+      rendered.should have_link('Edit', href: edit_sauce_path(sauce))
       rendered.should have_selector("input[type='submit'][value='Delete']")
     end
   end
 
   it "should show a link to add a new sauce" do
-    rendered.should have_link('Add', href: new_sauce_url)
+    rendered.should have_link('Add', href: new_sauce_path)
   end
 end

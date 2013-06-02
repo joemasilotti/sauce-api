@@ -6,9 +6,9 @@
         %td=sauce.name
         %td=sauce.manufacturer
         %td
-          %a{href: sauce_url(sauce)} Show
+          %a{href: sauce_path(sauce)} Show
         %td
-          %a{href: edit_sauce_url(sauce)} Edit
+          %a{href: edit_sauce_path(sauce)} Edit
         %td
           =button_to "Delete", sauce, :method => :delete
-%a{href: new_sauce_url} Add New Sauce
+%a{href: new_sauce_path} Add New Sauce

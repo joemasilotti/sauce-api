@@ -23,6 +23,6 @@ describe "flavors/index" do
   end
 
   it "should show a link to add a new flavor" do
-    rendered.should have_link('Add', href: new_flavor_url)
+    rendered.should have_link('Add', href: new_flavor_path)
   end
 end
