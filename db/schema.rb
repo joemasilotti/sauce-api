@@ -13,11 +13,10 @@
 
 ActiveRecord::Schema.define(:version => 20130531124620) do
 
-  create_table "flavors", :primary_key => "flavor_id", :force => true do |t|
+  create_table "flavors", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.integer  "sauce_id"
   end
 
   create_table "flavors_sauces", :id => false, :force => true do |t|
@@ -25,7 +24,7 @@ ActiveRecord::Schema.define(:version => 20130531124620) do
     t.integer "flavor_id"
   end
 
-  create_table "sauces", :primary_key => "sauce_id", :force => true do |t|
+  create_table "sauces", :force => true do |t|
     t.string   "name"
     t.string   "manufacturer"
     t.datetime "created_at",   :null => false
