@@ -16,8 +16,8 @@ describe "sauces/show" do
     rendered.should have_content(sauce.name)
   end
 
-  it "should show the sauce manufacturer" do
-    rendered.should have_content(sauce.manufacturer)
+  it "should show the sauce manufacturer name" do
+    rendered.should have_content(sauce.manufacturer.name)
   end
 
   it "should show each associated flavor" do

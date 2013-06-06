@@ -13,7 +13,7 @@ describe Sauce do
     end
 
     it "require a manufacturer" do
-      FactoryGirl.build(:sauce, :manufacturer => "").should_not be_valid
+      FactoryGirl.build(:sauce, :manufacturer => nil).should_not be_valid
     end
   end
 end

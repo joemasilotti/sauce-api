@@ -11,7 +11,7 @@ describe "sauces/index" do
   it "should show each sauce's properties" do
     @sauces.each do |sauce|
       rendered.should have_content(sauce.name)
-      rendered.should have_content(sauce.manufacturer)
+      rendered.should have_content(sauce.manufacturer.name)
     end
   end
 

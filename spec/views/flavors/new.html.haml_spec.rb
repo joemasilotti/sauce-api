@@ -8,8 +8,8 @@ describe "flavors/new" do
     render
   end
 
-  it "shows an editable field for flavor name" do
-    rendered.should have_selector("input[name='flavor[name]']")
+  it "shows an editable text field for flavor name" do
+    rendered.should have_selector("input[type='text'][name='flavor[name]']")
   end
 
   it "shows a submit button" do

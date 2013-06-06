@@ -114,10 +114,12 @@ describe SaucesController do
   end
 
   describe "#new" do
+    let!(:manufacturer) { FactoryGirl.create(:manufacturer) }
+
     def do_post
       post :create, :sauce => {
         :name => 'name',
-        :manufacturer => 'manufacturer'
+        :manufacturer_id => manufacturer.id
       }
     end
 
@@ -139,7 +141,7 @@ describe SaucesController do
     end
 
     context "when the sauce creation has errors" do
-      before { post :create, :sauce => { :name => nil, :manufacturer => 'manufacturer' } }
+      before { post :create, :sauce => { :name => nil, :manufacturer_id => manufacturer } }
 
       it "show the new page again" do
         response.should render_template :new

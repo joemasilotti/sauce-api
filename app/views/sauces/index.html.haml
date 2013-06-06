@@ -4,7 +4,7 @@
     - @sauces.each do |sauce|
       %tr
         %td=sauce.name
-        %td=sauce.manufacturer
+        %td=sauce.manufacturer.name
         %td
           %a{href: sauce_path(sauce)} Show
         %td
