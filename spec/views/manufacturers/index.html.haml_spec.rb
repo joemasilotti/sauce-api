@@ -8,6 +8,10 @@ describe "manufacturers/index" do
     render
   end
 
+  it "should render the nav partial" do
+    expect(response).to render_template(:partial => 'shared/_menu')
+  end
+
   it "should show each manufacturer's properties" do
     @manufacturers.each do |manufacturer|
       rendered.should have_content(manufacturer.name)

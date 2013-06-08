@@ -8,6 +8,10 @@ describe "manufacturers/show" do
     render
   end
 
+  it "should render the nav partial" do
+    expect(response).to render_template(:partial => 'shared/_menu')
+  end
+
   it "should show the manufacturer name" do
     rendered.should have_content(manufacturer.name)
   end

@@ -8,6 +8,10 @@ describe "sauces/index" do
     render
   end
 
+  it "should render the nav partial" do
+    expect(response).to render_template(:partial => 'shared/_menu')
+  end
+
   it "should show each sauce's properties" do
     @sauces.each do |sauce|
       rendered.should have_content(sauce.name)
