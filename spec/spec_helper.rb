@@ -6,6 +6,7 @@ require 'rspec/autorun'
 require 'capybara/rspec'
 require 'capybara/rails'
 require 'pry'
+require 'coveralls'
 
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
@@ -19,3 +20,5 @@ end
 def page
   @page ||= Capybara.string(rendered)
 end
+
+Coveralls.wear!
