@@ -1,16 +1,13 @@
-%h1 Flavors
-%table
+= render 'shared/menu'
+%h2 Flavors
+%table{class: "table table-condensed table-hover"}
   %tbody
     - @flavors.each do |flavor|
       %tr
         %td
           =flavor.name
         %td
-          %a{href: flavor_path(flavor)} Show
-        %td
-          %a{href: edit_flavor_path(flavor)} Edit
-        %td
-          =button_to "Delete", flavor, :method => :delete
+          %a{href: flavor_path(flavor), :class => 'btn'} Show
+          %a{href: edit_flavor_path(flavor), :class => 'btn'} Edit
+          = link_to 'Delete', flavor, :method => :delete, :class => 'btn btn-danger'
 %a{href: new_flavor_path} Add New Flavor
-
-= render 'shared/menu'

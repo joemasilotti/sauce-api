@@ -18,7 +18,7 @@ describe "flavors/index" do
     @flavors.each do |flavor|
       rendered.should have_link('Show', href: flavor_path(flavor))
       rendered.should have_link('Edit', href: edit_flavor_path(flavor))
-      rendered.should have_selector("input[type='submit'][value='Delete']")
+      rendered.should have_link('Delete', href: flavor_path(flavor))
     end
   end
 

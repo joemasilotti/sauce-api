@@ -23,7 +23,7 @@ describe "sauces/index" do
     @sauces.each do |sauce|
       rendered.should have_link('Show', href: sauce_path(sauce))
       rendered.should have_link('Edit', href: edit_sauce_path(sauce))
-      rendered.should have_selector("input[type='submit'][value='Delete']")
+      rendered.should have_link('Delete', href: sauce_path(sauce))
     end
   end
 

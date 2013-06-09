@@ -1,16 +1,13 @@
-%h1 Sauces
-%table
+= render 'shared/menu'
+%h2 Sauces
+%table{class: "table table-condensed table-hover"}
   %tbody
     - @sauces.each do |sauce|
       %tr
         %td=sauce.name
         %td=sauce.manufacturer.name
         %td
-          %a{href: sauce_path(sauce)} Show
-        %td
-          %a{href: edit_sauce_path(sauce)} Edit
-        %td
-          =button_to "Delete", sauce, :method => :delete
+          %a{href: sauce_path(sauce), :class=> 'btn'} Show
+          %a{href: edit_sauce_path(sauce), :class => 'btn'} Edit
+          = link_to 'Delete', sauce, :method => :delete, :class => 'btn btn-danger'
 %a{href: new_sauce_path} Add New Sauce
-
-= render 'shared/menu'

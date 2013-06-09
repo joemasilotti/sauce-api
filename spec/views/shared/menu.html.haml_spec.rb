@@ -5,6 +5,10 @@ describe "shared/_menu" do
     render
   end
 
+  it "should show a header with the name of the app" do
+    response.should have_content('Sauce API')
+  end
+
   it "should have a link to the sauces index page" do
     response.should have_link("Sauces", href: sauces_path)
   end

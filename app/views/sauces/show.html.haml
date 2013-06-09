@@ -1,8 +1,7 @@
-%h1= @sauce.name
-%h2= @sauce.manufacturer.name
-Flavors
+= render 'shared/menu'
+%h3= @sauce.name
+%h4= @sauce.manufacturer.name
+%h5 Flavors
 %ul
 - @sauce.flavors.each do |flavor|
   %li= flavor.name
-
-= render 'shared/menu'
