@@ -1,10 +1,8 @@
 %h1 Sauce API
 %ul{class: "nav nav-tabs"}
-  %li
+  %li{class: (params[:controller] == 'sauces') ? 'active' : ''}
     %a{href: sauces_path} Sauces
-  %li
+  %li{class: (params[:controller] == 'manufacturers') ? 'active' : ''}
     %a{href: manufacturers_path} Manufacturers
-  %li
+  %li{class: (params[:controller] == 'flavors') ? 'active' : ''}
     %a{href: flavors_path} Flavors
-
-%p
