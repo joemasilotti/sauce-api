@@ -19,7 +19,7 @@ class FlavorsController < ApplicationController
     @flavor = Flavor.find(params[:id])
 
     if @flavor.update_attributes(params[:flavor])
-      redirect_to @flavor
+      redirect_to @flavor, notice: "Flavor was successfully updated."
     else
       render :edit
     end
@@ -33,7 +33,7 @@ class FlavorsController < ApplicationController
     @flavor = Flavor.new(params[:flavor])
 
     if @flavor.save
-      redirect_to @flavor
+      redirect_to @flavor, notice: "Flavor was successfully added."
     else
       render :new
     end
@@ -43,6 +43,6 @@ class FlavorsController < ApplicationController
     @flavor = Flavor.find(params[:id])
     @flavor.destroy
 
-    redirect_to flavors_path
+    redirect_to flavors_path, notice: "Flavor was successfully deleted."
   end
 end

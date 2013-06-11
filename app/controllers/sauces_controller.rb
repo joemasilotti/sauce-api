@@ -20,7 +20,7 @@ class SaucesController < ApplicationController
     @sauce = Sauce.find(params[:id])
 
     if @sauce.update_attributes(params[:sauce])
-      redirect_to @sauce
+      redirect_to @sauce, notice: "Sauce was successfully updated."
     else
       render :edit
     end
@@ -34,7 +34,7 @@ class SaucesController < ApplicationController
     @sauce = Sauce.new(params[:sauce])
 
     if @sauce.save
-      redirect_to @sauce
+      redirect_to @sauce, notice: "Sauce was successfully added."
     else
       render :new
     end
@@ -44,6 +44,6 @@ class SaucesController < ApplicationController
     @sauce = Sauce.find(params[:id])
     @sauce.destroy
 
-    redirect_to sauces_path
+    redirect_to sauces_path, notice: "Sauce was successfully deleted."
   end
 end

@@ -92,6 +92,11 @@ describe SaucesController do
     end
 
     context "when the sauce was successfully updated" do
+      it "should set the flash message" do
+        put :update, :id => sauce, :sauce => { :name => "New Name" }
+        flash[:notice].should == "Sauce was successfully updated."
+      end
+
       it "should redirect to the show page" do
         put :update, :id => sauce, :sauce => { :name => "New Name" }
         response.should redirect_to sauce_path(assigns(:sauce))
@@ -134,7 +139,12 @@ describe SaucesController do
       it "should increase the sauce count by one" do
         lambda { do_post }.should change(Sauce, :count).by(1)
       end
-      
+
+      it "should set the flash message" do
+        do_post
+        flash[:notice].should == "Sauce was successfully added."
+      end
+
       it "should redirect to the show page" do
         do_post.should redirect_to sauce_path(assigns(:sauce))
       end
@@ -154,6 +164,11 @@ describe SaucesController do
 
     it "should destroy the sauce" do
       lambda { delete :destroy, :id => sauce }.should change(Sauce, :count).by(-1)
+    end
+
+    it "should set the flash message" do
+      delete :destroy, :id => sauce
+      flash[:notice].should == "Sauce was successfully deleted."
     end
 
     it "should redirect to the index page" do

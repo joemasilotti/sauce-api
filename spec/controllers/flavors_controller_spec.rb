@@ -87,8 +87,15 @@ describe FlavorsController do
     end
 
     context "when the flavor was successfully updated" do
-      it "should redirect to the show page" do
+      before do
         put :update, :id => flavor, :flavor => { :name => "New Name" }
+      end
+
+      it "should set the flash message" do
+        flash[:notice].should == "Flavor was successfully updated."
+      end
+
+      it "should redirect to the show page" do
         response.should redirect_to flavor_path(assigns(:flavor))
       end
     end
@@ -120,6 +127,11 @@ describe FlavorsController do
         lambda { do_post }.should change(Flavor, :count).by(1)
       end
 
+      it "should set the flash message" do
+        do_post
+        flash[:notice].should == "Flavor was successfully added."
+      end
+
       it "should redirect to the show page" do
         do_post.should redirect_to flavor_path(assigns(:flavor))
       end
@@ -139,6 +151,11 @@ describe FlavorsController do
 
     it "should destroy the flavor" do
       lambda { delete :destroy, :id => flavor }.should change(Flavor, :count).by(-1)
+    end
+
+    it "should set the flash message" do
+      delete :destroy, :id => flavor
+      flash[:notice].should == "Flavor was successfully deleted."
     end
 
     it "should redirect to the flavors index page" do

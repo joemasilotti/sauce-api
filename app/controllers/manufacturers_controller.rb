@@ -19,7 +19,7 @@ class ManufacturersController < ApplicationController
     @manufacturer = Manufacturer.find(params[:id])
 
     if @manufacturer.update_attributes(params[:manufacturer])
-      redirect_to @manufacturer
+      redirect_to @manufacturer, notice: "Manufacturer was successfully updated."
     else
       render :edit
     end
@@ -33,7 +33,7 @@ class ManufacturersController < ApplicationController
     @manufacturer = Manufacturer.new(params[:manufacturer])
 
     if @manufacturer.save
-      redirect_to @manufacturer
+      redirect_to @manufacturer, notice: "Manufacturer was successfully added."
     else
       render :new
     end
@@ -43,6 +43,6 @@ class ManufacturersController < ApplicationController
     @manufacturer = Manufacturer.find(params[:id])
     @manufacturer.destroy
 
-    redirect_to manufacturers_path
+    redirect_to manufacturers_path, notice: "Manufacturer was successfully deleted."
   end
 end

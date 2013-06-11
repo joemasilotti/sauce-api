@@ -1,11 +1,6 @@
 require 'spec_helper'
 
 describe "shared/_menu" do
-  it "should show a header with the name of the app" do
-    render
-    response.should have_content('Sauce API')
-  end
-
   describe "a link to the sauces index page" do
     let(:sauces_link) { page.find('.nav').find('a', :text => 'Sauces') }
     let(:parent_element) { sauces_link.find(:xpath, '..') }

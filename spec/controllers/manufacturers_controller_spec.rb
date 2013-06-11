@@ -91,6 +91,11 @@ describe ManufacturersController do
         put :update, :id => manufacturer, :manufacturer => { :name => "New Name" }
         response.should redirect_to manufacturer_path(assigns(:manufacturer))
       end
+
+      it "should set the flash message" do
+        put :update, :id => manufacturer, :manufacturer => { :name => "New Name" }
+        flash[:notice].should == "Manufacturer was successfully updated."
+      end
     end
 
     context "when the manufacturer update has errors" do
@@ -120,6 +125,11 @@ describe ManufacturersController do
         lambda { do_post }.should change(Manufacturer, :count).by(1)
       end
 
+      it "should set the flash message" do
+        do_post
+        flash[:notice].should == "Manufacturer was successfully added."
+      end
+
       it "should redirect to the show page" do
         do_post.should redirect_to manufacturer_path(assigns(:manufacturer))
       end
@@ -139,6 +149,11 @@ describe ManufacturersController do
 
     it "should destroy the manufacturer" do
       lambda { delete :destroy, :id => manufacturer }.should change(Manufacturer, :count).by(-1)
+    end
+
+    it "should set the flash message" do
+      delete :destroy, :id => manufacturer
+      flash[:notice].should == "Manufacturer was successfully deleted."
     end
 
     it "should redirect to the index page" do
