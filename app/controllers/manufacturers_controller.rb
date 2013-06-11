@@ -21,6 +21,7 @@ class ManufacturersController < ApplicationController
     if @manufacturer.update_attributes(params[:manufacturer])
       redirect_to @manufacturer, notice: "Manufacturer was successfully updated."
     else
+      flash[:alert] = @manufacturer.error_messages
       render :edit
     end
   end
@@ -35,6 +36,7 @@ class ManufacturersController < ApplicationController
     if @manufacturer.save
       redirect_to @manufacturer, notice: "Manufacturer was successfully added."
     else
+      flash[:alert] = @manufacturer.error_messages
       render :new
     end
   end

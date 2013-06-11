@@ -101,6 +101,11 @@ describe FlavorsController do
     end
 
     context "when the flavor update has errors" do
+      it "should set the flash message" do
+        put :update, :id => flavor, :flavor => { :name => nil }
+        flash[:alert].should == "Name can't be blank."
+      end
+
       it "show the edit page again" do
         put :update, :id => flavor, :flavor => { :name => nil }
         response.should render_template :edit
@@ -139,6 +144,10 @@ describe FlavorsController do
 
     context "when the flavor creation has errors" do
       before { post :create, :flavor => { :name => nil } }
+
+      it "should set the flash message" do
+        flash[:alert].should == "Name can't be blank."
+      end
 
       it "show the new page again" do
         response.should render_template :new

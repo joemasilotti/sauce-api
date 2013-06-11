@@ -111,6 +111,10 @@ describe SaucesController do
     end
 
     context "when the sauce update has errors" do
+      it "should set the flash message" do
+        put :update, :id => sauce, :sauce => { :name => nil }
+        flash[:alert].should == "Name can't be blank."
+      end
       it "show the edit page again" do
         put :update, :id => sauce, :sauce => { :name => nil }
         response.should render_template :edit
@@ -151,10 +155,28 @@ describe SaucesController do
     end
 
     context "when the sauce creation has errors" do
-      before { post :create, :sauce => { :name => nil, :manufacturer_id => manufacturer } }
+      context "when only the manufacturer is set" do
+        before { post :create, :sauce => { :name => nil, :manufacturer_id => manufacturer } }
 
-      it "show the new page again" do
-        response.should render_template :new
+        it "should show a flash message" do
+          flash[:alert].should == "Name can't be blank."
+        end
+
+        it "show the new page again" do
+          response.should render_template :new
+        end
+      end
+
+      context "when neither the name nor manufacturer are set" do
+        before { post :create, :sauce => { :name => nil, :manufacturer_id => nil } }
+
+        it "should show a flash message" do
+          flash[:alert].should == "Manufacturer can't be blank. Name can't be blank."
+        end
+
+        it "show the new page again" do
+          response.should render_template :new
+        end
       end
     end
   end

@@ -99,6 +99,11 @@ describe ManufacturersController do
     end
 
     context "when the manufacturer update has errors" do
+      it "should set the flash message" do
+        put :update, :id => manufacturer, :manufacturer => { :name => nil }
+        flash[:alert].should == "Name can't be blank."
+      end
+
       it "show the edit page again" do
         put :update, :id => manufacturer, :manufacturer => { :name => nil }
         response.should render_template :edit
@@ -137,6 +142,10 @@ describe ManufacturersController do
 
     context "when the manufacturer creation has errors" do
       before { post :create, :manufacturer => { :name => nil } }
+
+      it "should set the flash message" do
+        flash[:alert].should == "Name can't be blank."
+      end
 
       it "show the new page again" do
         response.should render_template :new

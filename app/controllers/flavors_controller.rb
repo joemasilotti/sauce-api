@@ -21,6 +21,7 @@ class FlavorsController < ApplicationController
     if @flavor.update_attributes(params[:flavor])
       redirect_to @flavor, notice: "Flavor was successfully updated."
     else
+      flash[:alert] = @flavor.error_messages
       render :edit
     end
   end
@@ -35,6 +36,7 @@ class FlavorsController < ApplicationController
     if @flavor.save
       redirect_to @flavor, notice: "Flavor was successfully added."
     else
+      flash[:alert] = @flavor.error_messages
       render :new
     end
   end

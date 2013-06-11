@@ -22,6 +22,7 @@ class SaucesController < ApplicationController
     if @sauce.update_attributes(params[:sauce])
       redirect_to @sauce, notice: "Sauce was successfully updated."
     else
+      flash[:alert] = @sauce.error_messages
       render :edit
     end
   end
@@ -36,6 +37,7 @@ class SaucesController < ApplicationController
     if @sauce.save
       redirect_to @sauce, notice: "Sauce was successfully added."
     else
+      flash[:alert] = @sauce.error_messages
       render :new
     end
   end
