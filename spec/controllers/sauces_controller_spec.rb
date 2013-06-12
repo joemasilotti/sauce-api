@@ -31,22 +31,21 @@ describe SaucesController do
     let!(:sauces) { [ FactoryGirl.create(:sauce), FactoryGirl.create(:sauce) ] }
 
     context "when requesting HTML" do
+      before { get:index }
+
       it "displays a list of sauces" do
-        get :index
         assigns(:sauces).should eq(sauces)
       end
 
       it "renders the :index view" do
-        get :index
         response.should render_template :index
       end
     end
 
     context "when requesting JSON" do
       it "renders the sauces in JSON" do
-        expected = sauces.to_json
         get :index, :format => :json
-        response.body.should == expected
+        response.body.should == sauces.to_json
       end
     end
   end
@@ -55,82 +54,94 @@ describe SaucesController do
     let!(:sauce) { FactoryGirl.create(:sauce) }
 
     context "when requesting HTML" do
+      before { get :show, id: sauce }
+
       it "display the sauce" do
-        get :show, id: sauce
         assigns(:sauce).should eq(sauce)
       end
 
       it "renders the :show view" do
-        get :show, id: sauce
         response.should render_template :show
       end
     end
 
     context "when requesting JSON" do
       it "renders the sauce in JSON" do
-        expected = sauce.to_json
         get :show, id: sauce, :format => :json
-        response.body.should == expected
+        response.body.should == sauce.to_json
       end
     end
   end
 
   describe "#edit" do
     let!(:sauce) { FactoryGirl.create(:sauce) }
-    let!(:flavor) { FactoryGirl.create(:flavor) }
+    let!(:flavors) { [ FactoryGirl.create(:flavor), FactoryGirl.create(:flavor) ] }
 
     context "when requesting HTML" do
+      before { get :edit, id: sauce }
+
       it "display the sauce" do
-        get :edit, id: sauce
         assigns(:sauce).should eq(sauce)
       end
 
       it "renders the :edit view" do
-        get :edit, id: sauce
         response.should render_template :edit
       end
     end
 
     context "when the sauce was successfully updated" do
+      before { put :update, :id => sauce, :sauce => { :name => "New Name", :flavor_ids => flavors } }
+
       it "should set the flash message" do
-        put :update, :id => sauce, :sauce => { :name => "New Name" }
         flash[:notice].should == "Sauce was successfully updated."
       end
 
       it "should redirect to the show page" do
-        put :update, :id => sauce, :sauce => { :name => "New Name" }
-        response.should redirect_to sauce_path(assigns(:sauce))
-      end
-    end
-
-    context "when the sauce's flavors were successfully updated" do
-      it "should redirect to the show page" do
-        put :update, :id => sauce, :sauce => { :name => "New Name", :flavor_ids => [ flavor ] }
         response.should redirect_to sauce_path(assigns(:sauce))
       end
     end
 
     context "when the sauce update has errors" do
-      it "should set the flash message" do
-        put :update, :id => sauce, :sauce => { :name => nil }
-        flash[:alert].should == "Name can't be blank."
+      context "when the name is missing" do
+        before { put :update, :id => sauce, :sauce => { :name => nil } }
+
+        it "should set the flash message" do
+          flash[:alert].should == "Name can't be blank."
+        end
+
+        it "show the edit page again" do
+          response.should render_template :edit
+        end
       end
-      it "show the edit page again" do
-        put :update, :id => sauce, :sauce => { :name => nil }
-        response.should render_template :edit
+
+      context "when the manufacturer is missing" do
+        before { put :update, :id => sauce, :sauce => { :manufacturer_id => nil } }
+
+        it "should set the flash message" do
+          flash[:alert].should == "Manufacturer can't be blank."
+        end
+
+        it "show the edit page again" do
+          response.should render_template :edit
+        end
+      end
+
+      context "when both the manufacturer and name are missing" do
+        before { put :update, :id => sauce, :sauce => { :name => nil, :manufacturer_id => nil } }
+
+        it "should set the flash message" do
+          flash[:alert].should == "Manufacturer can't be blank. Name can't be blank."
+        end
+
+        it "show the edit page again" do
+          response.should render_template :edit
+        end
       end
     end
   end
 
   describe "#new" do
     let!(:manufacturer) { FactoryGirl.create(:manufacturer) }
-
-    def do_post
-      post :create, :sauce => {
-        :name => 'name',
-        :manufacturer_id => manufacturer.id
-      }
-    end
 
     context "when requesting HTML" do
       it "renders the :new view" do
@@ -140,6 +151,13 @@ describe SaucesController do
     end
 
     context "when the sauce was successfully added" do
+      def do_post
+        post :create, :sauce => {
+          :name => 'name',
+          :manufacturer_id => manufacturer
+        }
+      end
+
       it "should increase the sauce count by one" do
         lambda { do_post }.should change(Sauce, :count).by(1)
       end
@@ -184,17 +202,21 @@ describe SaucesController do
   describe "#destroy" do
     let!(:sauce) { FactoryGirl.create(:sauce) }
 
+    def do_delete
+      delete :destroy, :id => sauce
+    end
+
     it "should destroy the sauce" do
-      lambda { delete :destroy, :id => sauce }.should change(Sauce, :count).by(-1)
+      lambda { do_delete }.should change(Sauce, :count).by(-1)
     end
 
     it "should set the flash message" do
-      delete :destroy, :id => sauce
+      do_delete
       flash[:notice].should == "Sauce was successfully deleted."
     end
 
     it "should redirect to the index page" do
-      delete :destroy, :id => sauce
+      do_delete
       expect(response).to redirect_to sauces_path
     end
   end

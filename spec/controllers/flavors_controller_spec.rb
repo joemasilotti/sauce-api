@@ -27,22 +27,21 @@ describe FlavorsController do
     let!(:flavors) { [ FactoryGirl.create(:flavor), FactoryGirl.create(:flavor) ] }
 
     context "when requesting HTML" do
+      before { get :index }
+
       it "displays a list of flavors" do
-        get :index
         assigns(:flavors).should eq(flavors)
       end
 
       it "renders the :index view" do
-        get :index
         response.should render_template :index
       end
     end
 
     context "when requesting JSON" do
       it "renders the flavors in JSON" do
-        expected = flavors.to_json
         get :index, :format => :json
-        response.body.should == expected
+        response.body.should == flavors.to_json
       end
     end
   end
@@ -51,13 +50,13 @@ describe FlavorsController do
     let!(:flavor) { FactoryGirl.create(:flavor) }
 
     context "when requesting HTML" do
+      before { get :show, id: flavor }
+
       it "display the flavor" do
-        get :show, id: flavor
         assigns(:flavor).should eq(flavor)
       end
 
       it "renders the :show view" do
-        get :show, id: flavor
         response.should render_template :show
       end
     end
@@ -75,21 +74,19 @@ describe FlavorsController do
     let!(:flavor) { FactoryGirl.create(:flavor) }
 
     context "when requesting HTML" do
+      before { get :edit, id: flavor }
+
       it "display the flavor" do
-        get :edit, id: flavor
         assigns(:flavor).should eq(flavor)
       end
 
       it "renders the :edit view" do
-        get :edit, id: flavor
         response.should render_template :edit
       end
     end
 
     context "when the flavor was successfully updated" do
-      before do
-        put :update, :id => flavor, :flavor => { :name => "New Name" }
-      end
+      before { put :update, :id => flavor, :flavor => { :name => "New Name" } }
 
       it "should set the flash message" do
         flash[:notice].should == "Flavor was successfully updated."
@@ -101,25 +98,19 @@ describe FlavorsController do
     end
 
     context "when the flavor update has errors" do
+      before { put :update, :id => flavor, :flavor => { :name => nil } }
+
       it "should set the flash message" do
-        put :update, :id => flavor, :flavor => { :name => nil }
         flash[:alert].should == "Name can't be blank."
       end
 
       it "show the edit page again" do
-        put :update, :id => flavor, :flavor => { :name => nil }
         response.should render_template :edit
       end
     end
   end
 
   describe "#new" do
-    def do_post
-      post :create, :flavor => {
-        :name => 'name',
-      }
-    end
-
     context "when requesting HTML" do
       it "renders the :new view" do
         get :new
@@ -128,6 +119,12 @@ describe FlavorsController do
     end
 
     context "when the flavor was successfully added" do
+      def do_post
+        post :create, :flavor => {
+          :name => 'name',
+        }
+      end
+
       it "should increase the flavor count by one" do
         lambda { do_post }.should change(Flavor, :count).by(1)
       end
@@ -158,17 +155,21 @@ describe FlavorsController do
   describe "#destroy" do
     let!(:flavor) { FactoryGirl.create(:flavor) }
 
+    def do_delete
+      delete :destroy, :id => flavor
+    end
+
     it "should destroy the flavor" do
-      lambda { delete :destroy, :id => flavor }.should change(Flavor, :count).by(-1)
+      lambda { do_delete }.should change(Flavor, :count).by(-1)
     end
 
     it "should set the flash message" do
-      delete :destroy, :id => flavor
+      do_delete
       flash[:notice].should == "Flavor was successfully deleted."
     end
 
     it "should redirect to the flavors index page" do
-      delete :destroy, :id => flavor
+      do_delete
       expect(response).to redirect_to flavors_path
     end
   end

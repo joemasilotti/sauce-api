@@ -27,22 +27,21 @@ describe ManufacturersController do
     let!(:manufacturers) { [ FactoryGirl.create(:manufacturer), FactoryGirl.create(:manufacturer) ] }
 
     context "when requesting HTML" do
+      before { get :index }
+
       it "displays a list of manufacturers" do
-        get :index
         assigns(:manufacturers).should eq(manufacturers)
       end
 
       it "renders the :index view" do
-        get :index
         response.should render_template :index
       end
     end
 
     context "when requesting JSON" do
       it "renders the manufacturers in JSON" do
-        expected = manufacturers.to_json
         get :index, :format => :json
-        response.body.should == expected
+        response.body.should == manufacturers.to_json
       end
     end
   end
@@ -51,22 +50,21 @@ describe ManufacturersController do
     let!(:manufacturer) { FactoryGirl.create(:manufacturer) }
 
     context "when requesting HTML" do
+      before { get :show, id: manufacturer }
+
       it "display the manufacturer" do
-        get :show, id: manufacturer
         assigns(:manufacturer).should eq(manufacturer)
       end
 
       it "renders the :show view" do
-        get :show, id: manufacturer
         response.should render_template :show
       end
     end
 
     context "when requesting JSON" do
       it "renders the manufacturer in JSON" do
-        expected = manufacturer.to_json
         get :show, id: manufacturer, :format => :json
-        response.body.should == expected
+        response.body.should == manufacturer.to_json
       end
     end
   end
@@ -75,49 +73,43 @@ describe ManufacturersController do
     let!(:manufacturer) { FactoryGirl.create(:manufacturer) }
 
     context "when requesting HTML" do
+      before { get :edit, id: manufacturer }
+
       it "display the manufacturer" do
-        get :edit, id: manufacturer
         assigns(:manufacturer).should eq(manufacturer)
       end
 
       it "renders the :edit view" do
-        get :edit, id: manufacturer
         response.should render_template :edit
       end
     end
 
     context "when the manufacturer was successfully updated" do
-      it "should redirect to the show page" do
-        put :update, :id => manufacturer, :manufacturer => { :name => "New Name" }
-        response.should redirect_to manufacturer_path(assigns(:manufacturer))
-      end
+      before { put :update, :id => manufacturer, :manufacturer => { :name => "New Name" } }
 
       it "should set the flash message" do
-        put :update, :id => manufacturer, :manufacturer => { :name => "New Name" }
         flash[:notice].should == "Manufacturer was successfully updated."
+      end
+
+      it "should redirect to the show page" do
+        response.should redirect_to manufacturer_path(assigns(:manufacturer))
       end
     end
 
     context "when the manufacturer update has errors" do
+      before { put :update, :id => manufacturer, :manufacturer => { :name => nil } }
+
       it "should set the flash message" do
-        put :update, :id => manufacturer, :manufacturer => { :name => nil }
         flash[:alert].should == "Name can't be blank."
       end
 
       it "show the edit page again" do
-        put :update, :id => manufacturer, :manufacturer => { :name => nil }
         response.should render_template :edit
       end
     end
   end
 
   describe "#new" do
-    def do_post
-      post :create, :manufacturer => {
-        :name => 'Name',
-      }
-    end
-
     context "when requesting HTML" do
       it "renders the :new view" do
         get :new
@@ -126,6 +118,12 @@ describe ManufacturersController do
     end
 
     context "when the manufacturer was successfully added" do
+      def do_post
+        post :create, :manufacturer => {
+          :name => 'Name',
+        }
+      end
+
       it "should increase the manufacturer count by one" do
         lambda { do_post }.should change(Manufacturer, :count).by(1)
       end
@@ -156,17 +154,21 @@ describe ManufacturersController do
   describe "#destroy" do
     let!(:manufacturer) { FactoryGirl.create(:manufacturer) }
 
+    def do_delete
+      delete :destroy, :id => manufacturer
+    end
+
     it "should destroy the manufacturer" do
-      lambda { delete :destroy, :id => manufacturer }.should change(Manufacturer, :count).by(-1)
+      lambda { do_delete }.should change(Manufacturer, :count).by(-1)
     end
 
     it "should set the flash message" do
-      delete :destroy, :id => manufacturer
+      do_delete
       flash[:notice].should == "Manufacturer was successfully deleted."
     end
 
     it "should redirect to the index page" do
-      delete :destroy, :id => manufacturer
+      do_delete
       expect(response).to redirect_to manufacturers_path
     end
   end
