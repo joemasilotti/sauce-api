@@ -1,4 +1,5 @@
 class FlavorsController < ApplicationController
+  include ErrorHelper
   respond_to :html, :json
 
   def index
@@ -21,7 +22,7 @@ class FlavorsController < ApplicationController
     if @flavor.update_attributes(params[:flavor])
       redirect_to @flavor, notice: "Flavor was successfully updated."
     else
-      flash[:alert] = @flavor.error_messages
+      flash[:alert] = error_messages(@flavor.errors)
       render :edit
     end
   end
@@ -36,7 +37,7 @@ class FlavorsController < ApplicationController
     if @flavor.save
       redirect_to @flavor, notice: "Flavor was successfully added."
     else
-      flash[:alert] = @flavor.error_messages
+      flash[:alert] = error_messages(@flavor.errors)
       render :new
     end
   end

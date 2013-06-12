@@ -1,4 +1,5 @@
 class SaucesController < ApplicationController
+  include ErrorHelper
   respond_to :html, :json
 
   def index
@@ -22,7 +23,7 @@ class SaucesController < ApplicationController
     if @sauce.update_attributes(params[:sauce])
       redirect_to @sauce, notice: "Sauce was successfully updated."
     else
-      flash[:alert] = @sauce.error_messages
+      flash[:alert] = error_messages(@sauce.errors)
       render :edit
     end
   end
@@ -37,7 +38,7 @@ class SaucesController < ApplicationController
     if @sauce.save
       redirect_to @sauce, notice: "Sauce was successfully added."
     else
-      flash[:alert] = @sauce.error_messages
+      flash[:alert] = error_messages(@sauce.errors)
       render :new
     end
   end

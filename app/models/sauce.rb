@@ -5,8 +5,4 @@ class Sauce < ActiveRecord::Base
 
   validates :manufacturer, :presence => true
   validates :name, :presence => true
-
-  def error_messages
-    errors.full_messages.map{ |item| item + '. '}.join.strip!
-  end
 end

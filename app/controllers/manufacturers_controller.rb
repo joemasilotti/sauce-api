@@ -1,4 +1,5 @@
 class ManufacturersController < ApplicationController
+  include ErrorHelper
   respond_to :html, :json
 
   def index
@@ -21,7 +22,7 @@ class ManufacturersController < ApplicationController
     if @manufacturer.update_attributes(params[:manufacturer])
       redirect_to @manufacturer, notice: "Manufacturer was successfully updated."
     else
-      flash[:alert] = @manufacturer.error_messages
+      flash[:alert] = error_messages(@manufacturer.errors)
       render :edit
     end
   end
@@ -36,7 +37,7 @@ class ManufacturersController < ApplicationController
     if @manufacturer.save
       redirect_to @manufacturer, notice: "Manufacturer was successfully added."
     else
-      flash[:alert] = @manufacturer.error_messages
+      flash[:alert] = error_messages(@manufacturer.errors)
       render :new
     end
   end
