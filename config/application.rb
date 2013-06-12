@@ -61,5 +61,8 @@ module SauceApi
 
     # From Bootstrap for Sass
     config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
+
+    # Needed for Devise with Heroku
+    config.assets.initialize_on_precompile = false
   end
 end

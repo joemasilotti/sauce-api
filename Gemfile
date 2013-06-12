@@ -8,6 +8,7 @@ gem 'haml'
 gem 'simple_form'
 gem 'sass-rails', '~> 3.2'
 gem 'bootstrap-sass', '~> 2.3.1.3'
+gem 'devise'
 gem 'coveralls', require: false
 
 group :assets do
