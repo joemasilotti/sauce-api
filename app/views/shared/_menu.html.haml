@@ -5,3 +5,8 @@
     %a{href: manufacturers_path} Manufacturers
   %li{class: (params[:controller] == 'flavors') ? 'active' : ''}
     %a{href: flavors_path} Flavors
+  %li{class: 'right'}
+    - if admin_signed_in?
+      =link_to "Log Out", destroy_admin_session_path(@current_admin), method: :delete
+    - else
+      %a{href: new_admin_session_path} Log In

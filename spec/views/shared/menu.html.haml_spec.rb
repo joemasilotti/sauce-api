@@ -165,4 +165,27 @@ describe "shared/_menu" do
       end
     end
   end
+
+  describe "log in/out links" do
+    context "when the user is logged in as an admin" do
+      before do
+        @admin = double('admin')
+        view.stub(admin_signed_in?: true)
+        view.stub(current_admin: @admin)
+        render
+      end
+
+      it "should display a log out button" do
+        page.should have_link('Log Out', href: destroy_admin_session_path(@current_admin))
+      end
+    end
+
+    context "when the user is not logged in" do
+      before { render }
+
+      it "should display a log in button" do
+        page.should have_link('Log In', href: new_admin_session_path)
+      end
+    end
+  end
 end
