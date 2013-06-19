@@ -31,14 +31,30 @@ describe SaucesController do
     let!(:sauces) { [ FactoryGirl.create(:sauce), FactoryGirl.create(:sauce) ] }
 
     context "when requesting HTML" do
-      before { get:index }
-
       it "displays a list of sauces" do
+        get :index
         assigns(:sauces).should eq(sauces)
       end
 
       it "renders the :index view" do
+        get :index
         response.should render_template :index
+      end
+
+      context "when the user is logged in as an admin" do
+        login_admin
+
+        it "should pass the show, edit, and delete actions" do
+          get :index
+          assigns(:actions).should eq([:show, :edit, :delete])
+        end
+      end
+
+      context "when the user is not logged in" do
+        it "should pass only the show action" do
+          get :index
+          assigns(:actions).should eq([:show])
+        end
       end
     end
 
@@ -75,126 +91,173 @@ describe SaucesController do
 
   describe "#edit" do
     let!(:sauce) { FactoryGirl.create(:sauce) }
-    let!(:flavors) { [ FactoryGirl.create(:flavor), FactoryGirl.create(:flavor) ] }
 
-    context "when requesting HTML" do
+    context "when the user is logged in as an admin" do
+      login_admin
+      let!(:flavors) { [ FactoryGirl.create(:flavor), FactoryGirl.create(:flavor) ] }
+
+      context "when requesting HTML" do
+        before { get :edit, id: sauce }
+
+        it "display the sauce" do
+          assigns(:sauce).should eq(sauce)
+        end
+
+        it "renders the :edit view" do
+          response.should render_template :edit
+        end
+      end
+
+      context "when the sauce was successfully updated" do
+        before { put :update, :id => sauce, :sauce => { :name => "New Name", :flavor_ids => flavors } }
+
+        it "should set the flash message" do
+          flash[:notice].should == "Sauce was successfully updated."
+        end
+
+        it "should redirect to the show page" do
+          response.should redirect_to sauce_path(assigns(:sauce))
+        end
+      end
+
+      context "when the sauce update has errors" do
+        context "when the name is missing" do
+          before { put :update, :id => sauce, :sauce => { :name => nil } }
+
+          it "should set the flash message" do
+            flash[:alert].should == "Name can't be blank."
+          end
+
+          it "show the edit page again" do
+            response.should render_template :edit
+          end
+        end
+
+        context "when the manufacturer is missing" do
+          before { put :update, :id => sauce, :sauce => { :manufacturer_id => nil } }
+
+          it "should set the flash message" do
+            flash[:alert].should == "Manufacturer can't be blank."
+          end
+
+          it "show the edit page again" do
+            response.should render_template :edit
+          end
+        end
+
+        context "when both the manufacturer and name are missing" do
+          before { put :update, :id => sauce, :sauce => { :name => nil, :manufacturer_id => nil } }
+
+          it "should set the flash message" do
+            flash[:alert].should == "Manufacturer can't be blank. Name can't be blank."
+          end
+
+          it "show the edit page again" do
+            response.should render_template :edit
+          end
+        end
+      end
+    end
+
+    context "when the user is not logged in" do
       before { get :edit, id: sauce }
 
-      it "display the sauce" do
-        assigns(:sauce).should eq(sauce)
+      it "set the flash informing the user they must be logged in" do
+        flash[:alert].should eq("You must be logged in to edit a sauce.")
       end
 
-      it "renders the :edit view" do
-        response.should render_template :edit
-      end
-    end
-
-    context "when the sauce was successfully updated" do
-      before { put :update, :id => sauce, :sauce => { :name => "New Name", :flavor_ids => flavors } }
-
-      it "should set the flash message" do
-        flash[:notice].should == "Sauce was successfully updated."
-      end
-
-      it "should redirect to the show page" do
-        response.should redirect_to sauce_path(assigns(:sauce))
+      it "should redirect to the login page" do
+        response.should redirect_to(new_admin_session_path)
       end
     end
+  end
 
-    context "when the sauce update has errors" do
-      context "when the name is missing" do
-        before { put :update, :id => sauce, :sauce => { :name => nil } }
+  describe "#update" do
+    let!(:sauce) { FactoryGirl.create(:sauce) }
 
-        it "should set the flash message" do
-          flash[:alert].should == "Name can't be blank."
-        end
+    context "when the user is not logged in" do
+      before { put :update, :id => sauce, :sauce => { :name => "New Name", :flavor_ids => nil } }
 
-        it "show the edit page again" do
-          response.should render_template :edit
-        end
+      it "set the flash informing the user they must be logged in" do
+        flash[:alert].should eq("You must be logged in to edit a sauce.")
       end
 
-      context "when the manufacturer is missing" do
-        before { put :update, :id => sauce, :sauce => { :manufacturer_id => nil } }
-
-        it "should set the flash message" do
-          flash[:alert].should == "Manufacturer can't be blank."
-        end
-
-        it "show the edit page again" do
-          response.should render_template :edit
-        end
-      end
-
-      context "when both the manufacturer and name are missing" do
-        before { put :update, :id => sauce, :sauce => { :name => nil, :manufacturer_id => nil } }
-
-        it "should set the flash message" do
-          flash[:alert].should == "Manufacturer can't be blank. Name can't be blank."
-        end
-
-        it "show the edit page again" do
-          response.should render_template :edit
-        end
+      it "should redirect to the login page" do
+        response.should redirect_to(new_admin_session_path)
       end
     end
   end
 
   describe "#new" do
     let!(:manufacturer) { FactoryGirl.create(:manufacturer) }
-
-    context "when requesting HTML" do
-      it "renders the :new view" do
-        get :new
-        response.should render_template :new
-      end
+    def do_post
+      post :create, :sauce => {
+        :name => 'name',
+        :manufacturer_id => manufacturer
+      }
     end
 
-    context "when the sauce was successfully added" do
-      def do_post
-        post :create, :sauce => {
-          :name => 'name',
-          :manufacturer_id => manufacturer
-        }
-      end
+    context "when the user is logged in as an admin" do
+      login_admin
 
-      it "should increase the sauce count by one" do
-        lambda { do_post }.should change(Sauce, :count).by(1)
-      end
-
-      it "should set the flash message" do
-        do_post
-        flash[:notice].should == "Sauce was successfully added."
-      end
-
-      it "should redirect to the show page" do
-        do_post.should redirect_to sauce_path(assigns(:sauce))
-      end
-    end
-
-    context "when the sauce creation has errors" do
-      context "when only the manufacturer is set" do
-        before { post :create, :sauce => { :name => nil, :manufacturer_id => manufacturer } }
-
-        it "should show a flash message" do
-          flash[:alert].should == "Name can't be blank."
-        end
-
-        it "show the new page again" do
+      context "when requesting HTML" do
+        it "renders the :new view" do
+          get :new
           response.should render_template :new
         end
       end
 
-      context "when neither the name nor manufacturer are set" do
-        before { post :create, :sauce => { :name => nil, :manufacturer_id => nil } }
-
-        it "should show a flash message" do
-          flash[:alert].should == "Manufacturer can't be blank. Name can't be blank."
+      context "when the sauce was successfully added" do
+        it "should increase the sauce count by one" do
+          lambda { do_post }.should change(Sauce, :count).by(1)
         end
 
-        it "show the new page again" do
-          response.should render_template :new
+        it "should set the flash message" do
+          do_post
+          flash[:notice].should == "Sauce was successfully added."
         end
+
+        it "should redirect to the show page" do
+          do_post.should redirect_to sauce_path(assigns(:sauce))
+        end
+      end
+
+      context "when the sauce creation has errors" do
+        context "when only the manufacturer is set" do
+          before { post :create, :sauce => { :name => nil, :manufacturer_id => manufacturer } }
+
+          it "should show a flash message" do
+            flash[:alert].should == "Name can't be blank."
+          end
+
+          it "show the new page again" do
+            response.should render_template :new
+          end
+        end
+
+        context "when neither the name nor manufacturer are set" do
+          before { post :create, :sauce => { :name => nil, :manufacturer_id => nil } }
+
+          it "should show a flash message" do
+            flash[:alert].should == "Manufacturer can't be blank. Name can't be blank."
+          end
+
+          it "show the new page again" do
+            response.should render_template :new
+          end
+        end
+      end
+    end
+
+    context "when the user is not logged in" do
+      before { do_post }
+
+      it "set the flash informing the user they must be logged in" do
+        flash[:alert].should eq("You must be logged in to create a new sauce.")
+      end
+
+      it "should redirect to the login page" do
+        response.should redirect_to(new_admin_session_path)
       end
     end
   end
@@ -206,18 +269,34 @@ describe SaucesController do
       delete :destroy, :id => sauce
     end
 
-    it "should destroy the sauce" do
-      lambda { do_delete }.should change(Sauce, :count).by(-1)
+    context "when the user is logged in as an admin" do
+      login_admin
+
+      it "should destroy the sauce" do
+        lambda { do_delete }.should change(Sauce, :count).by(-1)
+      end
+
+      it "should set the flash message" do
+        do_delete
+        flash[:notice].should == "Sauce was successfully deleted."
+      end
+
+      it "should redirect to the index page" do
+        do_delete
+        expect(response).to redirect_to sauces_path
+      end
     end
 
-    it "should set the flash message" do
-      do_delete
-      flash[:notice].should == "Sauce was successfully deleted."
-    end
+    context "when the user is not logged in" do
+      before { do_delete }
 
-    it "should redirect to the index page" do
-      do_delete
-      expect(response).to redirect_to sauces_path
+      it "should set the flash message" do
+        flash[:alert].should == "You must be logged in to delete a sauce."
+      end
+
+      it "should redirect to the index page" do
+        response.should redirect_to(new_admin_session_path)
+      end
     end
   end
 end

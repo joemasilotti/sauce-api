@@ -3,6 +3,12 @@ class SaucesController < ApplicationController
   respond_to :html, :json
 
   def index
+    if admin_signed_in?
+      @actions = [:show, :edit, :delete]
+    else
+      @actions = [:show]
+    end
+
     @sauces = Sauce.all
     respond_with @sauces
   end
@@ -13,13 +19,16 @@ class SaucesController < ApplicationController
   end
 
   def edit
+    redirect_to new_admin_session_path, alert: "You must be logged in to edit a sauce." and return if !admin_signed_in?
+
     @sauce = Sauce.find(params[:id])
     @flavors = Flavor.all
   end
 
   def update
-    @sauce = Sauce.find(params[:id])
+    redirect_to new_admin_session_path, alert: "You must be logged in to edit a sauce." and return if !admin_signed_in?
 
+    @sauce = Sauce.find(params[:id])
     if @sauce.update_attributes(params[:sauce])
       redirect_to @sauce, notice: "Sauce was successfully updated."
     else
@@ -33,8 +42,9 @@ class SaucesController < ApplicationController
   end
 
   def create
-    @sauce = Sauce.new(params[:sauce])
+    redirect_to new_admin_session_path, alert: "You must be logged in to create a new sauce." and return if !admin_signed_in?
 
+    @sauce = Sauce.new(params[:sauce])
     if @sauce.save
       redirect_to @sauce, notice: "Sauce was successfully added."
     else
@@ -44,6 +54,8 @@ class SaucesController < ApplicationController
   end
 
   def destroy
+    redirect_to new_admin_session_path, alert: "You must be logged in to delete a sauce." and return if !admin_signed_in?
+
     @sauce = Sauce.find(params[:id])
     @sauce.destroy
 
