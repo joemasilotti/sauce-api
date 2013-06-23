@@ -1,8 +1,10 @@
 SauceApi::Application.routes.draw do
   devise_for :admins
+  devise_for :users
 
   resources :sauces
-  root :to => "sauces#index"
   resources :flavors
   resources :manufacturers
+
+  root :to => "sauces#index"
 end
