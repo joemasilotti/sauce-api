@@ -3,6 +3,12 @@ class FlavorsController < ApplicationController
   respond_to :html, :json
 
   def index
+    if admin_signed_in?
+      @actions = [:show, :edit, :delete]
+    else
+      @actions = [:show]
+    end
+
     @flavors = Flavor.all
     respond_with @flavors
   end
@@ -13,12 +19,15 @@ class FlavorsController < ApplicationController
   end
 
   def edit
+    redirect_to new_admin_session_path, alert: "You must be logged in to edit a flavor." and return if !admin_signed_in?
+
     @flavor = Flavor.find(params[:id])
   end
 
   def update
-    @flavor = Flavor.find(params[:id])
+    redirect_to new_admin_session_path, alert: "You must be logged in to edit a flavor." and return if !admin_signed_in?
 
+    @flavor = Flavor.find(params[:id])
     if @flavor.update_attributes(params[:flavor])
       redirect_to @flavor, notice: "Flavor was successfully updated."
     else
@@ -28,12 +37,15 @@ class FlavorsController < ApplicationController
   end
 
   def new
+    redirect_to new_admin_session_path, alert: "You must be logged in to create a flavor." and return if !admin_signed_in?
+
     @flavor = Flavor.new
   end
 
   def create
-    @flavor = Flavor.new(params[:flavor])
+    redirect_to new_admin_session_path, alert: "You must be logged in to create a flavor." and return if !admin_signed_in?
 
+    @flavor = Flavor.new(params[:flavor])
     if @flavor.save
       redirect_to @flavor, notice: "Flavor was successfully added."
     else
@@ -43,6 +55,8 @@ class FlavorsController < ApplicationController
   end
 
   def destroy
+    redirect_to new_admin_session_path, alert: "You must be logged in to delete a flavor." and return if !admin_signed_in?
+
     @flavor = Flavor.find(params[:id])
     @flavor.destroy
 

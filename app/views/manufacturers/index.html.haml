@@ -4,9 +4,11 @@
   %tbody
     - @manufacturers.each do |manufacturer|
       %tr
+        %td=manufacturer.name
         %td
-          =manufacturer.name
-        %td
-          %a{href: manufacturer_path(manufacturer), :class => 'btn'} Show
-          %a{href: edit_manufacturer_path(manufacturer), :class => 'btn'} Edit
-%a{href: new_manufacturer_path} Add New Manufacturer
+          - if @actions.include?(:show)
+            %a{href: manufacturer_path(manufacturer), :class => 'btn'} Show
+          - if @actions.include?(:edit)
+            %a{href: edit_manufacturer_path(manufacturer), :class => 'btn'} Edit
+- if @actions.include?(:add)
+  %a{href: new_manufacturer_path} Add New Manufacturer

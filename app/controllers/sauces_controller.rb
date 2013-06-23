@@ -38,11 +38,13 @@ class SaucesController < ApplicationController
   end
 
   def new
+    redirect_to new_admin_session_path, alert: "You must be logged in to create a sauce." and return if !admin_signed_in?
+
     @sauce = Sauce.new
   end
 
   def create
-    redirect_to new_admin_session_path, alert: "You must be logged in to create a new sauce." and return if !admin_signed_in?
+    redirect_to new_admin_session_path, alert: "You must be logged in to create a sauce." and return if !admin_signed_in?
 
     @sauce = Sauce.new(params[:sauce])
     if @sauce.save

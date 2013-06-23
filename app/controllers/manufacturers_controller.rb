@@ -3,6 +3,12 @@ class ManufacturersController < ApplicationController
   respond_to :html, :json
 
   def index
+    if admin_signed_in?
+      @actions = [:show, :edit]
+    else
+      @actions = [:show]
+    end
+
     @manufacturers = Manufacturer.all
     respond_with @manufacturers
   end
@@ -13,12 +19,15 @@ class ManufacturersController < ApplicationController
   end
 
   def edit
+    redirect_to new_admin_session_path, alert: "You must be logged in to edit a manufacturer." and return if !admin_signed_in?
+
     @manufacturer = Manufacturer.find(params[:id])
   end
 
   def update
-    @manufacturer = Manufacturer.find(params[:id])
+    redirect_to new_admin_session_path, alert: "You must be logged in to edit a manufacturer." and return if !admin_signed_in?
 
+    @manufacturer = Manufacturer.find(params[:id])
     if @manufacturer.update_attributes(params[:manufacturer])
       redirect_to @manufacturer, notice: "Manufacturer was successfully updated."
     else
@@ -28,12 +37,15 @@ class ManufacturersController < ApplicationController
   end
 
   def new
+    redirect_to new_admin_session_path, alert: "You must be logged in to create a manufacturer." and return if !admin_signed_in?
+
     @manufacturer = Manufacturer.new
   end
 
   def create
-    @manufacturer = Manufacturer.new(params[:manufacturer])
+    redirect_to new_admin_session_path, alert: "You must be logged in to create a manufacturer." and return if !admin_signed_in?
 
+    @manufacturer = Manufacturer.new(params[:manufacturer])
     if @manufacturer.save
       redirect_to @manufacturer, notice: "Manufacturer was successfully added."
     else
@@ -43,6 +55,8 @@ class ManufacturersController < ApplicationController
   end
 
   def destroy
+    redirect_to new_admin_session_path, alert: "You must be logged in to delete a manufacturer." and return if !admin_signed_in?
+
     @manufacturer = Manufacturer.find(params[:id])
     @manufacturer.destroy
 

@@ -36,6 +36,22 @@ describe ManufacturersController do
       it "renders the :index view" do
         response.should render_template :index
       end
+
+      context "when the user is logged in as an admin" do
+        login_admin
+
+        it "should pass the show, edit, and delete actions" do
+          get :index
+          assigns(:actions).should eq([:show, :edit])
+        end
+      end
+
+      context "when the user is not logged in" do
+        it "should pass only the show action" do
+          get :index
+          assigns(:actions).should eq([:show])
+        end
+      end
     end
 
     context "when requesting JSON" do
@@ -72,81 +88,135 @@ describe ManufacturersController do
   describe "#edit" do
     let!(:manufacturer) { FactoryGirl.create(:manufacturer) }
 
-    context "when requesting HTML" do
+    context "when the user is logged in as an admin" do
+      login_admin
+
+      context "when requesting HTML" do
+        before { get :edit, id: manufacturer }
+
+        it "display the manufacturer" do
+          assigns(:manufacturer).should eq(manufacturer)
+        end
+
+        it "renders the :edit view" do
+          response.should render_template :edit
+        end
+      end
+    end
+
+    context "when the user is not logged in" do
       before { get :edit, id: manufacturer }
 
-      it "display the manufacturer" do
-        assigns(:manufacturer).should eq(manufacturer)
+      it_should_behave_like "an admin only action" do
+        let(:action) { "edit" }
+      end
+    end
+  end
+
+  describe "#update" do
+    let!(:manufacturer) { FactoryGirl.create(:manufacturer) }
+
+    context "when the user is logged in as an admin" do
+      login_admin
+
+      context "when the manufacturer was successfully updated" do
+        before { put :update, :id => manufacturer, :manufacturer => { :name => "New Name" } }
+
+        it "should set the flash message" do
+          flash[:notice].should == "Manufacturer was successfully updated."
+        end
+
+        it "should redirect to the show page" do
+          response.should redirect_to manufacturer_path(assigns(:manufacturer))
+        end
       end
 
-      it "renders the :edit view" do
-        response.should render_template :edit
+      context "when the manufacturer update has errors" do
+        before { put :update, :id => manufacturer, :manufacturer => { :name => nil } }
+
+        it "should set the flash message" do
+          flash[:alert].should == "Name can't be blank."
+        end
+
+        it "show the edit page again" do
+          response.should render_template :edit
+        end
       end
     end
 
-    context "when the manufacturer was successfully updated" do
+    context "when the user is not logged in" do
       before { put :update, :id => manufacturer, :manufacturer => { :name => "New Name" } }
 
-      it "should set the flash message" do
-        flash[:notice].should == "Manufacturer was successfully updated."
-      end
-
-      it "should redirect to the show page" do
-        response.should redirect_to manufacturer_path(assigns(:manufacturer))
-      end
-    end
-
-    context "when the manufacturer update has errors" do
-      before { put :update, :id => manufacturer, :manufacturer => { :name => nil } }
-
-      it "should set the flash message" do
-        flash[:alert].should == "Name can't be blank."
-      end
-
-      it "show the edit page again" do
-        response.should render_template :edit
+      it_should_behave_like "an admin only action" do
+        let(:action) { "edit" }
       end
     end
   end
 
   describe "#new" do
-    context "when requesting HTML" do
-      it "renders the :new view" do
-        get :new
-        response.should render_template :new
+    context "when the user is logged in as an admin" do
+      login_admin
+
+      context "when requesting HTML" do
+        it "renders the :new view" do
+          get :new
+          response.should render_template :new
+        end
       end
     end
 
-    context "when the manufacturer was successfully added" do
-      def do_post
-        post :create, :manufacturer => {
-          :name => 'Name',
-        }
+    context "when the user is not logged in" do
+      before { get :new }
+
+      it_should_behave_like "an admin only action" do
+        let(:action) { "create" }
+      end
+    end
+  end
+
+  describe "#create" do
+    def do_post
+      post :create, :manufacturer => {
+        :name => 'Name',
+      }
+    end
+
+    context "when the user is logged in as an admin" do
+      login_admin
+
+      context "when the manufacturer was successfully added" do
+        it "should increase the manufacturer count by one" do
+          lambda { do_post }.should change(Manufacturer, :count).by(1)
+        end
+
+        it "should set the flash message" do
+          do_post
+          flash[:notice].should == "Manufacturer was successfully added."
+        end
+
+        it "should redirect to the show page" do
+          do_post.should redirect_to manufacturer_path(assigns(:manufacturer))
+        end
       end
 
-      it "should increase the manufacturer count by one" do
-        lambda { do_post }.should change(Manufacturer, :count).by(1)
-      end
+      context "when the manufacturer creation has errors" do
+        before { post :create, :manufacturer => { :name => nil } }
 
-      it "should set the flash message" do
-        do_post
-        flash[:notice].should == "Manufacturer was successfully added."
-      end
+        it "should set the flash message" do
+          flash[:alert].should == "Name can't be blank."
+        end
 
-      it "should redirect to the show page" do
-        do_post.should redirect_to manufacturer_path(assigns(:manufacturer))
+        it "show the new page again" do
+          response.should render_template :new
+        end
       end
     end
 
-    context "when the manufacturer creation has errors" do
-      before { post :create, :manufacturer => { :name => nil } }
+    context "when the user is not logged in" do
+      before { do_post }
 
-      it "should set the flash message" do
-        flash[:alert].should == "Name can't be blank."
-      end
-
-      it "show the new page again" do
-        response.should render_template :new
+      it_should_behave_like "an admin only action" do
+        let(:action) { "create" }
       end
     end
   end
@@ -158,18 +228,30 @@ describe ManufacturersController do
       delete :destroy, :id => manufacturer
     end
 
-    it "should destroy the manufacturer" do
-      lambda { do_delete }.should change(Manufacturer, :count).by(-1)
+    context "when the user is logged in as an admin" do
+      login_admin
+
+      it "should destroy the manufacturer" do
+        lambda { do_delete }.should change(Manufacturer, :count).by(-1)
+      end
+
+      it "should set the flash message" do
+        do_delete
+        flash[:notice].should == "Manufacturer was successfully deleted."
+      end
+
+      it "should redirect to the index page" do
+        do_delete
+        expect(response).to redirect_to manufacturers_path
+      end
     end
 
-    it "should set the flash message" do
-      do_delete
-      flash[:notice].should == "Manufacturer was successfully deleted."
-    end
+    context "when the user is not logged in" do
+      before { do_delete }
 
-    it "should redirect to the index page" do
-      do_delete
-      expect(response).to redirect_to manufacturers_path
+      it_should_behave_like "an admin only action" do
+        let(:action) { "delete" }
+      end
     end
   end
 end

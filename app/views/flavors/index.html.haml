@@ -4,10 +4,13 @@
   %tbody
     - @flavors.each do |flavor|
       %tr
+        %td=flavor.name
         %td
-          =flavor.name
-        %td
-          %a{href: flavor_path(flavor), :class => 'btn'} Show
-          %a{href: edit_flavor_path(flavor), :class => 'btn'} Edit
-          = link_to 'Delete', flavor, :method => :delete, :class => 'btn btn-danger'
-%a{href: new_flavor_path} Add New Flavor
+          - if @actions.include?(:show)
+            %a{href: flavor_path(flavor), :class => 'btn'} Show
+          - if @actions.include?(:edit)
+            %a{href: edit_flavor_path(flavor), :class => 'btn'} Edit
+          - if @actions.include?(:delete)
+            = link_to 'Delete', flavor, :method => :delete, :class => 'btn btn-danger'
+- if @actions.include?(:add)
+  %a{href: new_flavor_path} Add New Flavor
