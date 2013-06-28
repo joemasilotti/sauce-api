@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe "flavors/edit" do
-  let!(:flavor) { FactoryGirl.create(:flavor) }
+  let(:flavor) { mock_model(Flavor) }
 
   before(:each) do
     assign(:flavor, flavor)

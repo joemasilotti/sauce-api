@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe "sauces/new" do
-  let!(:sauce) { FactoryGirl.create(:sauce) }
+  let(:sauce) { mock_model(Sauce) }
 
   before(:each) do
     assign(:sauce, sauce)

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe "flavors/show" do
-  let!(:flavor) { FactoryGirl.create(:flavor) }
+  let(:flavor) { FactoryGirl.build(:flavor) }
 
   before(:each) do
     assign(:flavor, flavor)

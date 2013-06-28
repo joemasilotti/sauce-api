@@ -1,13 +1,12 @@
 require 'spec_helper'
 
 describe "sauces/show" do
-  let!(:sauce) { FactoryGirl.create(:sauce) }
-  let!(:associated_flavors) { [ FactoryGirl.create(:flavor, :name => "Sauce 1"), FactoryGirl.create(:flavor, :name => "Sauce 2") ] }
-  let!(:not_associated_flavor) { FactoryGirl.create(:flavor, :name => "Sauce 3") }
+  let!(:sauce) { FactoryGirl.build(:sauce) }
+  let!(:associated_flavors) { [ FactoryGirl.build(:flavor, :name => "Sauce 1"), FactoryGirl.build(:flavor, :name => "Sauce 2") ] }
+  let!(:not_associated_flavor) { FactoryGirl.build(:flavor, :name => "Sauce 3") }
 
   before(:each) do
     sauce.flavors = associated_flavors
-    sauce.save
     assign(:sauce, sauce)
     render
   end

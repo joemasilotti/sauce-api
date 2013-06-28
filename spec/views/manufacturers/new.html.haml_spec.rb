@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe "manufacturers/new" do
-  let!(:manufacturer) { FactoryGirl.create(:manufacturer) }
+  let!(:manufacturer) { mock_model(Manufacturer) }
 
   before(:each) do
     assign(:manufacturer, manufacturer)
