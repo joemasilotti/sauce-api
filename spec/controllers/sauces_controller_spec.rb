@@ -111,9 +111,7 @@ describe SaucesController do
     context "when the user is not logged in" do
       before { get :edit, id: sauce }
 
-      it_should_behave_like "an admin only action" do
-        let(:action) { "edit" }
-      end
+      it_should_behave_like "an admin only action"
     end
   end
 
@@ -178,9 +176,7 @@ describe SaucesController do
     context "when the user is not logged in" do
       before { put :update, :id => sauce, :sauce => { :name => "New Name" } }
 
-      it_should_behave_like "an admin only action" do
-        let(:action) { "edit" }
-      end
+      it_should_behave_like "an admin only action"
     end
   end
 
@@ -199,9 +195,7 @@ describe SaucesController do
     context "when the user is not logged in" do
       before { get :new }
 
-      it_should_behave_like "an admin only action" do
-        let(:action) { "create" }
-      end
+      it_should_behave_like "an admin only action"
     end
   end
 
@@ -267,9 +261,7 @@ describe SaucesController do
         }
       }
 
-      it_should_behave_like "an admin only action" do
-        let(:action) { "create" }
-      end
+      it_should_behave_like "an admin only action"
     end
   end
 
@@ -301,13 +293,7 @@ describe SaucesController do
     context "when the user is not logged in" do
       before { do_delete }
 
-      it "should set the flash message" do
-        flash[:alert].should == "You must be logged in to delete a sauce."
-      end
-
-      it "should redirect to the index page" do
-        response.should redirect_to(new_admin_session_path)
-      end
+      it_should_behave_like "an admin only action"
     end
   end
 end

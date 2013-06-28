@@ -107,9 +107,7 @@ describe ManufacturersController do
     context "when the user is not logged in" do
       before { get :edit, id: manufacturer }
 
-      it_should_behave_like "an admin only action" do
-        let(:action) { "edit" }
-      end
+      it_should_behave_like "an admin only action"
     end
   end
 
@@ -147,9 +145,7 @@ describe ManufacturersController do
     context "when the user is not logged in" do
       before { put :update, :id => manufacturer, :manufacturer => { :name => "New Name" } }
 
-      it_should_behave_like "an admin only action" do
-        let(:action) { "edit" }
-      end
+      it_should_behave_like "an admin only action"
     end
   end
 
@@ -168,9 +164,7 @@ describe ManufacturersController do
     context "when the user is not logged in" do
       before { get :new }
 
-      it_should_behave_like "an admin only action" do
-        let(:action) { "create" }
-      end
+      it_should_behave_like "an admin only action"
     end
   end
 
@@ -215,9 +209,7 @@ describe ManufacturersController do
     context "when the user is not logged in" do
       before { do_post }
 
-      it_should_behave_like "an admin only action" do
-        let(:action) { "create" }
-      end
+      it_should_behave_like "an admin only action"
     end
   end
 
@@ -249,9 +241,7 @@ describe ManufacturersController do
     context "when the user is not logged in" do
       before { do_delete }
 
-      it_should_behave_like "an admin only action" do
-        let(:action) { "delete" }
-      end
+      it_should_behave_like "an admin only action"
     end
   end
 end

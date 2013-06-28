@@ -1,5 +1,6 @@
 class ManufacturersController < ApplicationController
   include ErrorHelper
+  before_filter :authenticate_admin!, only: [:edit, :update, :new, :create, :destroy]
   respond_to :html, :json
 
   def index
@@ -19,14 +20,10 @@ class ManufacturersController < ApplicationController
   end
 
   def edit
-    redirect_to new_admin_session_path, alert: "You must be logged in to edit a manufacturer." and return if !admin_signed_in?
-
     @manufacturer = Manufacturer.find(params[:id])
   end
 
   def update
-    redirect_to new_admin_session_path, alert: "You must be logged in to edit a manufacturer." and return if !admin_signed_in?
-
     @manufacturer = Manufacturer.find(params[:id])
     if @manufacturer.update_attributes(params[:manufacturer])
       redirect_to @manufacturer, notice: "Manufacturer was successfully updated."
@@ -37,14 +34,10 @@ class ManufacturersController < ApplicationController
   end
 
   def new
-    redirect_to new_admin_session_path, alert: "You must be logged in to create a manufacturer." and return if !admin_signed_in?
-
     @manufacturer = Manufacturer.new
   end
 
   def create
-    redirect_to new_admin_session_path, alert: "You must be logged in to create a manufacturer." and return if !admin_signed_in?
-
     @manufacturer = Manufacturer.new(params[:manufacturer])
     if @manufacturer.save
       redirect_to @manufacturer, notice: "Manufacturer was successfully added."
@@ -55,8 +48,6 @@ class ManufacturersController < ApplicationController
   end
 
   def destroy
-    redirect_to new_admin_session_path, alert: "You must be logged in to delete a manufacturer." and return if !admin_signed_in?
-
     @manufacturer = Manufacturer.find(params[:id])
     @manufacturer.destroy
 

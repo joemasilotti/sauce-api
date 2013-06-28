@@ -8,7 +8,7 @@ module ControllerMacros
 
   shared_examples_for "an admin only action" do
     it "should set the flash message" do
-      flash[:alert].should == "You must be logged in to #{action} a #{described_class.to_s.chomp('sController').downcase}."
+      flash[:alert].should == "You need to sign in or sign up before continuing."
     end
 
     it "should redirect to the index page" do
