@@ -32,4 +32,5 @@ s2.flavors = [ f6 ]
 s3.flavors = [ f6 ]
 s4.flavors = [ f1, f4 ]
 
-a1 = Admin.create(:email => 'user@example.com', :password => 'password1')
+a1 = Admin.create(:email => 'admin@example.com', :password => 'password1')
+u1 = User.create(:email => 'user@example.com', :password => 'password1')

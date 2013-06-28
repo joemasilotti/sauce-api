@@ -5,6 +5,8 @@ class SaucesController < ApplicationController
   def index
     if admin_signed_in?
       @actions = [:show, :edit, :delete]
+    elsif user_signed_in?
+      @actions = [:show]
     else
       @actions = [:show]
     end
