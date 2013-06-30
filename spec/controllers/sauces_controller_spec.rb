@@ -120,10 +120,9 @@ describe SaucesController do
 
     context "when the user is logged in as an admin" do
       login_admin
-      let!(:flavors) { [ FactoryGirl.create(:flavor), FactoryGirl.create(:flavor) ] }
 
       context "when the sauce was successfully updated" do
-        before { put :update, :id => sauce, :sauce => { :name => "New Name", :flavor_ids => flavors } }
+        before { put :update, :id => sauce, :sauce => { :name => "New Name" } }
 
         it "should set the flash message" do
           flash[:notice].should == "Sauce was successfully updated."

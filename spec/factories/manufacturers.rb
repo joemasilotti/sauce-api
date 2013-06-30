@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :manufacturer do |manufacturer|
-    manufacturer.name "Manufacturer Name"
+  factory :manufacturer do
+    name "Manufacturer Name"
   end
 end

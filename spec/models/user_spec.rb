@@ -10,4 +10,8 @@ describe User do
       FactoryGirl.create(:user).should be_valid
     end
   end
+
+  describe "validations" do
+    it { should have_many(:reviews) }
+  end
 end

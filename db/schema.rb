@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130623210406) do
+ActiveRecord::Schema.define(:version => 20130630205549) do
 
   create_table "admins", :force => true do |t|
     t.string   "email",                  :default => "", :null => false
@@ -37,8 +37,8 @@ ActiveRecord::Schema.define(:version => 20130623210406) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "flavors_sauces", :id => false, :force => true do |t|
-    t.integer "sauce_id"
+  create_table "flavors_reviews", :id => false, :force => true do |t|
+    t.integer "review_id"
     t.integer "flavor_id"
   end
 
@@ -46,6 +46,15 @@ ActiveRecord::Schema.define(:version => 20130623210406) do
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "reviews", :force => true do |t|
+    t.integer  "user",                      :null => false
+    t.integer  "rating",     :default => 0, :null => false
+    t.integer  "sauce_id",                  :null => false
+    t.integer  "user_id",                   :null => false
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
   end
 
   create_table "sauces", :force => true do |t|

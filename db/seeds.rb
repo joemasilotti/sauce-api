@@ -27,10 +27,5 @@ f4 = Flavor.create(:name => 'sour')
 f5 = Flavor.create(:name => 'smoky')
 f6 = Flavor.create(:name => 'tangy')
 
-s1.flavors = [ f1, f3 ]
-s2.flavors = [ f6 ]
-s3.flavors = [ f6 ]
-s4.flavors = [ f1, f4 ]
-
 a1 = Admin.create(:email => 'admin@example.com', :password => 'password1')
 u1 = User.create(:email => 'user@example.com', :password => 'password1')
