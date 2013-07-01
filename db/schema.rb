@@ -49,10 +49,9 @@ ActiveRecord::Schema.define(:version => 20130630205549) do
   end
 
   create_table "reviews", :force => true do |t|
-    t.integer  "user",                      :null => false
-    t.integer  "rating",     :default => 0, :null => false
-    t.integer  "sauce_id",                  :null => false
     t.integer  "user_id",                   :null => false
+    t.integer  "sauce_id",                  :null => false
+    t.integer  "rating",     :default => 0, :null => false
     t.datetime "created_at",                :null => false
     t.datetime "updated_at",                :null => false
   end
