@@ -1,5 +1,5 @@
 %ul{class: "nav nav-tabs"}
-  %li{class: (params[:controller] == 'sauces') ? 'active' : ''}
+  %li{class: (params[:controller] == 'sauces' || params[:controller] == 'reviews') ? 'active' : ''}
     %a{href: sauces_path} Sauces
   %li{class: (params[:controller] == 'manufacturers') ? 'active' : ''}
     %a{href: manufacturers_path} Manufacturers

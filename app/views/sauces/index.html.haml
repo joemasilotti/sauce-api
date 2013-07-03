@@ -2,6 +2,10 @@
 %h2 Sauces
 %table{class: "table table-condensed table-hover"}
   %tbody
+    %tr
+      %th Sauce
+      %th Manufacturer
+      %th Actions
     - @sauces.each do |sauce|
       %tr
         %td=sauce.name
@@ -11,6 +15,8 @@
             %a{href: sauce_path(sauce), :class=> 'btn'} Show
           - if @actions.include?(:edit)
             %a{href: edit_sauce_path(sauce), :class => 'btn'} Edit
+          - if @actions.include?(:review)
+            %a{href: new_sauce_review_path(sauce), :class => 'btn btn-primary'} Review
           - if @actions.include?(:delete)
             = link_to 'Delete', sauce, :method => :delete, :class => 'btn btn-danger'
 - if @actions.include?(:add)

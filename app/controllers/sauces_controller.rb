@@ -7,7 +7,7 @@ class SaucesController < ApplicationController
     if admin_signed_in?
       @actions = [:show, :edit, :delete]
     elsif user_signed_in?
-      @actions = [:show]
+      @actions = [:show, :review]
     else
       @actions = [:show]
     end
@@ -18,6 +18,7 @@ class SaucesController < ApplicationController
 
   def show
     @sauce = Sauce.find(params[:id])
+    @reviews = @sauce.reviews
     respond_with @sauce
   end
 

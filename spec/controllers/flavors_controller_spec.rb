@@ -172,7 +172,7 @@ describe FlavorsController do
   describe "#create" do
     def do_post
       post :create, :flavor => {
-        :name => 'name',
+        :name => 'name'
       }
     end
 

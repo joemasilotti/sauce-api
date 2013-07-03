@@ -1,0 +1,14 @@
+%h5 Reviews
+%table{class: "table table-condensed table-hover"}
+  %tbody
+    %tr
+      %th Rating
+      %th User Email
+      %th Flavors
+    - @reviews.each do |review|
+      %tr
+        %td=review.rating
+        %td=review.user.email
+        %td
+          - review.flavors.each do |flavor|
+            = flavor.name

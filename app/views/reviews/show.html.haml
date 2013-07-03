@@ -1,0 +1,4 @@
+= render 'shared/menu'
+%h4 Rating: #{@review.rating}
+- @review.flavors.each do |flavor|
+  = flavor.name

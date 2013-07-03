@@ -2,6 +2,9 @@
 %h2 Flavors
 %table{class: "table table-condensed table-hover"}
   %tbody
+    %tr
+      %th Flavor
+      %th Actions
     - @flavors.each do |flavor|
       %tr
         %td=flavor.name

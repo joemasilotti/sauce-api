@@ -21,6 +21,17 @@ describe "shared/_menu" do
       end
     end
 
+    context "when the current controller is reviews" do
+      before do
+        params[:controller] = 'reviews'
+      end
+
+      it "sauces has an 'active' class" do
+        render
+        expect(parent_element[:class]).to eq('active')
+      end
+    end
+
     context "when the current page is a detail view of a sauce" do
       before do
         params[:controller] = 'sauces'
@@ -180,7 +191,7 @@ describe "shared/_menu" do
       end
     end
 
-    context "when the user is logged in as an user" do
+    context "when the user is logged in as a user" do
       before do
         @user = double('user')
         view.stub(user_signed_in?: true)
@@ -200,7 +211,7 @@ describe "shared/_menu" do
         page.should have_link('Log In Admin', href: new_admin_session_path)
       end
 
-      it "should display an user log in button" do
+      it "should display a user log in button" do
         page.should have_link('Log In User', href: new_user_session_path)
       end
     end

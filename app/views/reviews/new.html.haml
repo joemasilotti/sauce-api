@@ -1,0 +1,8 @@
+= render 'shared/menu'
+%h2=@sauce.name
+%h3=@sauce.manufacturer.name
+%h4 Review
+= simple_form_for [@sauce, @review] do |f|
+  = f.input :rating, collection: -1..1, as: :radio_buttons
+  = f.association :flavors, as: :check_boxes
+  = f.button :submit

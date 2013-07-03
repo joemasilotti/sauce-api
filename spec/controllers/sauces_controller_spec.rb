@@ -50,6 +50,15 @@ describe SaucesController do
         end
       end
 
+      context "when the user is logged in as a user" do
+        login_user
+
+        it "should pass the show and review actions" do
+          get :index
+          assigns(:actions).should eq([:show, :review])
+        end
+      end
+
       context "when the user is not logged in" do
         it "should pass only the show action" do
           get :index
@@ -68,12 +77,19 @@ describe SaucesController do
 
   describe "#show" do
     let!(:sauce) { FactoryGirl.create(:sauce) }
+    let(:user) { mock_model(User) }
+    let!(:reviews) { [ FactoryGirl.create(:review, user: user, sauce: sauce),
+                      FactoryGirl.create(:review, user: user, sauce: sauce) ] }
 
     context "when requesting HTML" do
       before { get :show, id: sauce }
 
-      it "display the sauce" do
+      it "assigns the sauce" do
         assigns(:sauce).should eq(sauce)
+      end
+
+      it "assigns the sauce's reviews" do
+        assigns(:reviews).should eq(reviews)
       end
 
       it "renders the show view" do

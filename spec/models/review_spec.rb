@@ -16,5 +16,7 @@ describe Review do
     it { should belong_to(:sauce) }
     it { should have_and_belong_to_many(:flavors) }
     it { should ensure_inclusion_of(:rating).in_range(-1..1) }
+    it { should allow_mass_assignment_of :rating }
+    it { should allow_mass_assignment_of :flavor_ids }
   end
 end

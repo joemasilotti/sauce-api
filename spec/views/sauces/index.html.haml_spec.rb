@@ -23,12 +23,13 @@ describe "sauces/index" do
 
   describe "sauce actions" do
     it "each sauce should display links for each action set" do
-      @actions = [:show, :edit, :delete, :add]
+      @actions = [:show, :edit, :review, :delete, :add]
       render
 
       @sauces.each do |sauce|
         rendered.should have_link('Show', href: sauce_path(sauce))
         rendered.should have_link('Edit', href: edit_sauce_path(sauce))
+        rendered.should have_link('Review', href: new_sauce_review_path(sauce))
         rendered.should have_link('Delete', href: sauce_path(sauce))
       end
       rendered.should have_link('Add', href: new_sauce_path)
@@ -41,6 +42,7 @@ describe "sauces/index" do
       @sauces.each do |sauce|
         rendered.should_not have_link('Show', href: sauce_path(sauce))
         rendered.should_not have_link('Edit', href: edit_sauce_path(sauce))
+        rendered.should_not have_link('Review', href: new_sauce_review_path(sauce))
         rendered.should_not have_link('Delete', href: sauce_path(sauce))
       end
       rendered.should_not have_link('Add', href: new_sauce_path)

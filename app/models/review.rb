@@ -4,4 +4,6 @@ class Review < ActiveRecord::Base
   has_and_belongs_to_many :flavors
 
   validates :rating, inclusion: -1..1
+
+  attr_accessible :rating, :flavor_ids
 end
