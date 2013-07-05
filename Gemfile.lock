@@ -30,6 +30,11 @@ GEM
       multi_json (~> 1.0)
     arel (3.0.2)
     bcrypt-ruby (3.0.1)
+    better_errors (0.9.0)
+      coderay (>= 1.0.0)
+      erubis (>= 2.6.6)
+    binding_of_caller (0.7.2)
+      debug_inspector (>= 0.0.1)
     bootstrap-sass (2.3.1.3)
       sass (~> 3.2)
     builder (3.0.4)
@@ -55,6 +60,7 @@ GEM
       rest-client
       simplecov (>= 0.7)
       thor
+    debug_inspector (0.0.2)
     debugger (1.6.0)
       columnize (>= 0.3.1)
       debugger-linecache (~> 1.2.0)
@@ -179,6 +185,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  better_errors
+  binding_of_caller
   bootstrap-sass (~> 2.3.1.3)
   capybara
   coffee-rails (~> 3.2.1)
