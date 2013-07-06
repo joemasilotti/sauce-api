@@ -7,7 +7,7 @@
       %th Manufacturer
       %th Actions
     - @sauces.each do |sauce|
-      %tr
+      %tr{id: "sauce-#{sauce.id}"}
         %td=sauce.name
         %td=sauce.manufacturer.name
         %td

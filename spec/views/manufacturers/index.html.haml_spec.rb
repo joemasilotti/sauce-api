@@ -16,6 +16,7 @@ describe "manufacturers/index" do
   it "should show each manufacturer's properties" do
     render
     @manufacturers.each do |manufacturer|
+      rendered.should have_css("#manufacturer-#{manufacturer.id}")
       rendered.should have_content(manufacturer.name)
       rendered.should have_content(manufacturer.name)
     end

@@ -6,7 +6,7 @@
       %th Flavor
       %th Actions
     - @flavors.each do |flavor|
-      %tr
+      %tr{id: "flavor-#{flavor.id}"}
         %td=flavor.name
         %td
           - if @actions.include?(:show)

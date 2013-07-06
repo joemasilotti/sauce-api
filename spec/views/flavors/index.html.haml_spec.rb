@@ -16,6 +16,7 @@ describe "flavors/index" do
   it "should show each flavor's properties" do
     render
     @flavors.each do |flavor|
+      rendered.should have_css("#flavor-#{flavor.id}")
       rendered.should have_content(flavor.name)
     end
   end

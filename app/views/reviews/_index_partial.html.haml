@@ -6,7 +6,7 @@
       %th User Email
       %th Flavors
     - @reviews.each do |review|
-      %tr
+      %tr{id: "review-#{review.id}"}
         %td=review.rating
         %td=review.user.email
         %td

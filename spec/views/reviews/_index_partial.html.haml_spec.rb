@@ -11,6 +11,13 @@ describe "reviews/_index_partial" do
     ]
   end
 
+  it "sets the row's id to the review's id" do
+    render
+    @reviews.each do |review|
+      rendered.should have_css("#review-#{review.id}")
+    end
+  end
+
   it "shows each review's rating" do
     render
     @reviews.each do |review|

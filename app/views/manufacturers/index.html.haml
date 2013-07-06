@@ -6,7 +6,7 @@
       %th Manufacturer
       %th Actions
     - @manufacturers.each do |manufacturer|
-      %tr
+      %tr{id: "manufacturer-#{manufacturer.id}"}
         %td=manufacturer.name
         %td
           - if @actions.include?(:show)
