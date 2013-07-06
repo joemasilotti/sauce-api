@@ -132,6 +132,10 @@ describe ManufacturersController do
       context "when the manufacturer update has errors" do
         before { put :update, :id => manufacturer, :manufacturer => { :name => nil } }
 
+        it "assigns the manufacturer" do
+          assigns(:manufacturer).should eq(manufacturer)
+        end
+
         it "should set the flash message" do
           flash[:alert].should == "Name can't be blank."
         end

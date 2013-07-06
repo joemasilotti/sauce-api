@@ -121,6 +121,10 @@ describe FlavorsController do
       context "when the flavor was successfully updated" do
         before { put :update, :id => flavor, :flavor => { :name => "New Name" } }
 
+        it "assigns the flavor" do
+          assigns(:flavor).should eq(flavor)
+        end
+
         it "should set the flash message" do
           flash[:notice].should == "Flavor was successfully updated."
         end

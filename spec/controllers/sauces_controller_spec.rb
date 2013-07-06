@@ -153,6 +153,10 @@ describe SaucesController do
         context "when the manufacturer is missing" do
           before { put :update, :id => sauce, :sauce => { :manufacturer_id => nil } }
 
+          it "assigns the sauce" do
+            assigns(:sauce).should eq(sauce)
+          end
+
           it "should set the flash message" do
             flash[:alert].should == "Manufacturer can't be blank."
           end

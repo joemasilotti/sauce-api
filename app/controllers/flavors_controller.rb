@@ -1,5 +1,5 @@
 class FlavorsController < ApplicationController
-  include ErrorHelper
+  include ControllerHelper
   before_filter :authenticate_admin!, only: [:edit, :update, :new, :create, :destroy]
   respond_to :html, :json
 
@@ -25,12 +25,7 @@ class FlavorsController < ApplicationController
 
   def update
     @flavor = Flavor.find(params[:id])
-    if @flavor.update_attributes(params[:flavor])
-      redirect_to @flavor, notice: "Flavor was successfully updated."
-    else
-      flash[:alert] = error_messages(@flavor.errors)
-      render :edit
-    end
+    update_and_redirect(@flavor)
   end
 
   def new
@@ -39,12 +34,7 @@ class FlavorsController < ApplicationController
 
   def create
     @flavor = Flavor.new(params[:flavor])
-    if @flavor.save
-      redirect_to @flavor, notice: "Flavor was successfully added."
-    else
-      flash[:alert] = error_messages(@flavor.errors)
-      render :new
-    end
+    create_and_redirect(@flavor)
   end
 
   def destroy

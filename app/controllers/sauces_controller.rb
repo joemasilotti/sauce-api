@@ -1,5 +1,5 @@
 class SaucesController < ApplicationController
-  include ErrorHelper
+  include ControllerHelper
   before_filter :authenticate_admin!, only: [:edit, :update, :new, :create, :destroy]
   respond_to :html, :json
 
@@ -28,12 +28,7 @@ class SaucesController < ApplicationController
 
   def update
     @sauce = Sauce.find(params[:id])
-    if @sauce.update_attributes(params[:sauce])
-      redirect_to @sauce, notice: "Sauce was successfully updated."
-    else
-      flash[:alert] = error_messages(@sauce.errors)
-      render :edit
-    end
+    update_and_redirect(@sauce)
   end
 
   def new
@@ -42,12 +37,7 @@ class SaucesController < ApplicationController
 
   def create
     @sauce = Sauce.new(params[:sauce])
-    if @sauce.save
-      redirect_to @sauce, notice: "Sauce was successfully added."
-    else
-      flash[:alert] = error_messages(@sauce.errors)
-      render :new
-    end
+    create_and_redirect(@sauce)
   end
 
   def destroy

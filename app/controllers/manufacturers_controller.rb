@@ -1,5 +1,5 @@
 class ManufacturersController < ApplicationController
-  include ErrorHelper
+  include ControllerHelper
   before_filter :authenticate_admin!, only: [:edit, :update, :new, :create, :destroy]
   respond_to :html, :json
 
@@ -25,12 +25,7 @@ class ManufacturersController < ApplicationController
 
   def update
     @manufacturer = Manufacturer.find(params[:id])
-    if @manufacturer.update_attributes(params[:manufacturer])
-      redirect_to @manufacturer, notice: "Manufacturer was successfully updated."
-    else
-      flash[:alert] = error_messages(@manufacturer.errors)
-      render :edit
-    end
+    update_and_redirect(@manufacturer)
   end
 
   def new
@@ -39,12 +34,7 @@ class ManufacturersController < ApplicationController
 
   def create
     @manufacturer = Manufacturer.new(params[:manufacturer])
-    if @manufacturer.save
-      redirect_to @manufacturer, notice: "Manufacturer was successfully added."
-    else
-      flash[:alert] = error_messages(@manufacturer.errors)
-      render :new
-    end
+    create_and_redirect(@manufacturer)
   end
 
   def destroy
