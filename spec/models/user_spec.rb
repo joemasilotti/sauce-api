@@ -14,4 +14,12 @@ describe User do
   describe "validations" do
     it { should have_many(:reviews) }
   end
+
+  describe "before_save" do
+    it "adds an authentication token" do
+      user = FactoryGirl.build(:user)
+      user.save
+      user.authentication_token.should_not be_nil
+    end
+  end
 end
