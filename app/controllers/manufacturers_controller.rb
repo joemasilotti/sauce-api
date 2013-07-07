@@ -5,7 +5,7 @@ class ManufacturersController < ApplicationController
 
   def index
     if admin_signed_in?
-      @actions = [:show, :edit]
+      @actions = [:show, :edit, :add]
     else
       @actions = [:show]
     end

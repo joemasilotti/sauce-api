@@ -40,9 +40,9 @@ describe ManufacturersController do
       context "when the user is logged in as an admin" do
         login_admin
 
-        it "should pass the show, edit, and delete actions" do
+        it "should pass the show, edit, and add actions" do
           get :index
-          assigns(:actions).should eq([:show, :edit])
+          assigns(:actions).should eq([:show, :edit, :add])
         end
       end
 

@@ -44,9 +44,9 @@ describe SaucesController do
       context "when the user is logged in as an admin" do
         login_admin
 
-        it "should pass the show, edit, and delete actions" do
+        it "should pass the show, edit, add, and delete actions" do
           get :index
-          assigns(:actions).should eq([:show, :edit, :delete])
+          assigns(:actions).should eq([:show, :edit, :add, :delete])
         end
       end
 

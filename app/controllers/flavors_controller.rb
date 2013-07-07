@@ -5,7 +5,7 @@ class FlavorsController < ApplicationController
 
   def index
     if admin_signed_in?
-      @actions = [:show, :edit, :delete]
+      @actions = [:show, :edit, :add, :delete]
     else
       @actions = [:show]
     end
