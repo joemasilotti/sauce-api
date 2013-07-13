@@ -23,6 +23,7 @@ class ReviewsController < ApplicationController
     @review.user = current_user
 
     if @review.save
+      respond_with(@sauce, @review, status: 201) and return if request.format == :json
       redirect_to sauce, notice: "Review was successfully added."
     else
       flash[:alert] = error_messages(@review.errors)

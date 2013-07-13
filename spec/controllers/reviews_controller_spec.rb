@@ -99,15 +99,13 @@ describe ReviewsController do
   end
 
   describe "#create" do
-    before do
-      @sauce = FactoryGirl.create(:sauce)
-      @flavor = FactoryGirl.create(:flavor)
-    end
+    let(:sauce) { sauce = FactoryGirl.create(:sauce) }
+    let(:flavor) { FactoryGirl.create(:flavor) }
 
     def do_post
-      post :create, 
-        sauce_id: @sauce,
-        review: { rating: "1" , flavor_ids: [ @flavor ] }
+      post :create,
+        sauce_id: sauce,
+        review: { rating: "1" , flavor_ids: [ flavor ] }
     end
 
     context "when the user is logged in as a user" do
@@ -131,7 +129,7 @@ describe ReviewsController do
       context "when the review creation has errors" do
         context "when the rating isn't set" do
           before do
-            post :create, sauce_id: @sauce,
+            post :create, sauce_id: sauce,
               review: { rating: nil }
           end
 
@@ -150,6 +148,39 @@ describe ReviewsController do
       before { do_post }
 
       it_should_behave_like "a user only action"
+    end
+
+    context "when the request is done via json" do
+      let(:user) { FactoryGirl.create(:user) }
+
+      context "when the review does not have errors" do
+        it "responds with the added response code" do
+          post :create,
+            format: :json,
+            auth_token: user.authentication_token,
+            sauce_id: sauce,
+            review: { rating: "1" , flavor_ids: [ flavor.id ] }
+
+          response.status.should eq(201)
+        end
+      end
+
+      context "when the review has errors" do
+        before do
+          post :create,
+            format: :json,
+            auth_token: user.authentication_token,
+            sauce_id: sauce,
+            review: { rating: nil , flavor_ids: [ flavor.id ] }
+        end
+
+        it "responds with the error code" do
+          response.status.should eq()
+        end
+
+        it "prints the errors via json" do
+
+      end
     end
   end
 end
